@@ -58,10 +58,30 @@ const FavoriteButton = styled(ModalButton)`
   }
 `;
 
-const ConfirmModal = ({ isOpen, onRequestClose, onConfirm, onConfirmAndAddToFavorites }) => (
+const ItemColor = styled.div`
+  margin-top: 0.5rem;
+  background-color: ${props => props.color};
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+`;
+
+const ItemSize = styled.p`
+  margin: 0;
+`;
+
+const ConfirmModal = ({ isOpen, onRequestClose, onConfirm, onConfirmAndAddToFavorites, item }) => (
   <StyledModal isOpen={isOpen} onRequestClose={onRequestClose} ariaHideApp={false}>
     <ModalContent>
       <h2>Are you sure you want to remove this item from the cart?</h2>
+      {item && (
+        <>
+          <p>{item.title}</p>
+          <ItemSize>Size: {item.size}</ItemSize>
+          <ItemColor color={item.color} />
+        </>
+      )}
       <div>
         <ModalButton onClick={onConfirm}>Yes, Remove</ModalButton>
         <FavoriteButton onClick={onConfirmAndAddToFavorites}>Yes and Add to Favorites</FavoriteButton>

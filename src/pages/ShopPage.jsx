@@ -1,8 +1,8 @@
+// src/pages/ShopPage.jsx
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ProductCard from '../components/ProductCard';
-import { useCart } from '../hooks/useCart';
-import { useLocation, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 // Styled components
 const Container = styled.div`
@@ -11,20 +11,6 @@ const Container = styled.div`
   gap: 1rem;
   padding: 1rem;
   justify-content: center;
-`;
-
-const Notification = styled.div`
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  background-color: #4caf50;
-  color: white;
-  padding: 1rem;
-  border-radius: 4px;
-  z-index: 1000;
-  display: ${({ show }) => (show ? 'block' : 'none')};
-  opacity: ${({ show }) => (show ? '1' : '0')};
-  transition: opacity 0.3s ease-in-out;
 `;
 
 const NoResults = styled.p`
@@ -37,9 +23,6 @@ const NoResults = styled.p`
 function ShopPage() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const { addToCart } = useCart();
-  const [showNotification, setShowNotification] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -68,25 +51,13 @@ function ShopPage() {
     setFilteredProducts(filtered);
   }, [location.search, products]);
 
-  const handleShowNotification = () => {
-    setShowNotification(true);
-    setTimeout(() => {
-      setShowNotification(false);
-    }, 2000);
-  };
-
   return (
     <div>
-      <Notification show={showNotification}>Product added to cart!</Notification>
       <Container>
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <Link key={product.id} to={`/product/${product.id}`}>
-              <ProductCard
-                product={product}
-                addToCart={addToCart}
-                showNotification={handleShowNotification}
-              />
+              <ProductCard product={product} />
             </Link>
           ))
         ) : (

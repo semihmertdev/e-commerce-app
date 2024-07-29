@@ -9,25 +9,29 @@ export const useCart = () => useContext(CartContext);
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
-  const addToCart = (product, quantity) => {
-    const existingProduct = cart.find(item => item.id === product.id);
+  const addToCart = (product, quantity, size, color) => {
+    const existingProduct = cart.find(item => item.id === product.id && item.size === size && item.color === color);
     if (existingProduct) {
       setCart(cart.map(item =>
-        item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+        item.id === product.id && item.size === size && item.color === color
+          ? { ...item, quantity: item.quantity + quantity }
+          : item
       ));
     } else {
-      setCart([...cart, { ...product, quantity }]);
+      setCart([...cart, { ...product, quantity, size, color }]);
     }
   };
 
-  const updateCartQuantity = (productId, quantity) => {
+  const updateCartQuantity = (productId, size, color, quantity) => {
     setCart(cart.map(item =>
-      item.id === productId ? { ...item, quantity } : item
+      item.id === productId && item.size === size && item.color === color
+        ? { ...item, quantity }
+        : item
     ));
   };
 
-  const removeFromCart = (productId) => {
-    setCart(cart.filter(item => item.id !== productId));
+  const removeFromCart = (productId, size, color) => {
+    setCart(cart.filter(item => item.id !== productId || item.size !== size || item.color !== color));
   };
 
   return (

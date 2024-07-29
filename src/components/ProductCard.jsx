@@ -1,3 +1,4 @@
+// src/components/ProductCard.jsx
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -28,19 +29,6 @@ const Title = styled.h3`
 const Price = styled.p`
   font-size: 1rem;
   color: #888;
-`;
-
-const Button = styled.button`
-  padding: 0.5rem 1rem;
-  margin: 0.5rem 0;
-  border: none;
-  background-color: #333;
-  color: #fff;
-  border-radius: 4px;
-
-  &:hover {
-    background-color: #555;
-  }
 `;
 
 const ProductImage = styled.img`
@@ -78,21 +66,13 @@ function ProductCard({ product }) {
     }
   };
 
-  const handleAddToCart = (e) => {
-    e.preventDefault(); // Prevent default link behavior
-    addToCart(product, 1); // Use default quantity of 1
-  };
-
   return (
     <Card>
-      <Link to={`/product/${product.id}`}>
+      <Link to={`/product/${product.id}`} onClick={() => addToCart(product, 1)}>
         <ProductImage src={product.image} alt={product.title} />
         <Title>{product.title}</Title>
+        <Price>${product.price}</Price>
       </Link>
-      <Price>${product.price}</Price>
-      <Button onClick={handleAddToCart}>
-        Add to Cart
-      </Button>
       <FavoriteButton $isFavorite={isFavorite} onClick={handleFavoriteToggle}>
         <HeartIcon />
       </FavoriteButton>

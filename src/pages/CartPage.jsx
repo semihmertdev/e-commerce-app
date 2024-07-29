@@ -1,8 +1,7 @@
-
 // src/pages/CartPage.jsx
 import React, { useState } from 'react';
 import { useCart } from '../hooks/useCart';
-import { useFavorites } from '../hooks/useFavorites'; // Yeni eklenen
+import { useFavorites } from '../hooks/useFavorites';
 import styled from 'styled-components';
 import ConfirmModal from '../components/ConfirmModal';
 
@@ -18,9 +17,16 @@ const CartItem = styled.div`
   padding: 1rem;
   margin-bottom: 1rem;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+const ItemImage = styled.img`
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 1rem;
 `;
 
 const ItemDetails = styled.div`
@@ -86,16 +92,29 @@ const TotalAmount = styled.div`
   text-align: right;
 `;
 
+const ItemColor = styled.div`
+  margin-top: 0.5rem;
+  background-color: ${props => props.color};
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+`;
+
+const ItemSize = styled.p`
+  margin: 0;
+`;
+
 function CartPage() {
   const { cart, updateCartQuantity, removeFromCart } = useCart();
-  const { addToFavorites } = useFavorites(); // Yeni eklenen
+  const { addToFavorites } = useFavorites();
   const [modalOpen, setModalOpen] = useState(false);
   const [itemToRemove, setItemToRemove] = useState(null);
 
-  const handleQuantityChange = (id, increment) => {
-    const newQuantity = cart.find(item => item.id === id)?.quantity + increment;
+  const handleQuantityChange = (id, size, color, increment) => {
+    const newQuantity = cart.find(item => item.id === id && item.size === size && item.color === color)?.quantity + increment;
     if (newQuantity > 0) {
-      updateCartQuantity(id, newQuantity);
+      updateCartQuantity(id, size, color, newQuantity);
     }
   };
 
@@ -106,14 +125,14 @@ function CartPage() {
 
   const confirmRemove = () => {
     if (itemToRemove !== null) {
-      removeFromCart(itemToRemove.id);
+      removeFromCart(itemToRemove.id, itemToRemove.size, itemToRemove.color);
       setModalOpen(false);
     }
   };
 
   const confirmRemoveAndAddToFavorites = () => {
     if (itemToRemove !== null) {
-      removeFromCart(itemToRemove.id);
+      removeFromCart(itemToRemove.id, itemToRemove.size, itemToRemove.color);
       addToFavorites(itemToRemove);
       setModalOpen(false);
     }
@@ -125,17 +144,22 @@ function CartPage() {
     <CartContainer>
       <h2>Your Cart</h2>
       {cart.map((item) => (
-        <CartItem key={item.id}>
-          <ItemDetails>
-            <ItemTitle>{item.title}</ItemTitle>
-            <Price>Price: ${item.price}</Price>
-          </ItemDetails>
-          <QuantityContainer>
-            <QuantityButton onClick={() => handleQuantityChange(item.id, -1)}>-</QuantityButton>
-            <QuantityDisplay>{item.quantity}</QuantityDisplay>
-            <QuantityButton onClick={() => handleQuantityChange(item.id, 1)}>+</QuantityButton>
-          </QuantityContainer>
-          <RemoveButton onClick={() => handleRemove(item)}>Remove</RemoveButton>
+        <CartItem key={`${item.id}-${item.size}-${item.color}`}>
+          <ItemImage src={item.image} alt={item.title} />
+          <div>
+            <ItemDetails>
+              <ItemTitle>{item.title}</ItemTitle>
+              <Price>Price: ${item.price}</Price>
+              <ItemSize>Size: {item.size}</ItemSize>
+              <ItemColor color={item.color} />
+            </ItemDetails>
+            <QuantityContainer>
+              <QuantityButton onClick={() => handleQuantityChange(item.id, item.size, item.color, -1)}>-</QuantityButton>
+              <QuantityDisplay>{item.quantity}</QuantityDisplay>
+              <QuantityButton onClick={() => handleQuantityChange(item.id, item.size, item.color, 1)}>+</QuantityButton>
+            </QuantityContainer>
+            <RemoveButton onClick={() => handleRemove(item)}>Remove</RemoveButton>
+          </div>
         </CartItem>
       ))}
       <TotalAmount>Total: ${totalAmount}</TotalAmount>
@@ -144,10 +168,10 @@ function CartPage() {
         onRequestClose={() => setModalOpen(false)}
         onConfirm={confirmRemove}
         onConfirmAndAddToFavorites={confirmRemoveAndAddToFavorites}
+        item={itemToRemove}
       />
     </CartContainer>
   );
 }
 
 export default CartPage;
-
