@@ -1,62 +1,137 @@
+import React, { useState } from 'react';
 import { useCart } from '../hooks/useCart';
 import styled from 'styled-components';
+import ConfirmModal from '../components/ConfirmModal';
 
 const CartContainer = styled.div`
-  padding: 1rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
 `;
 
 const CartItem = styled.div`
-  border-bottom: 1px solid #ccc;
-  padding: 0.5rem 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+const ItemDetails = styled.div`
+  flex: 1;
 `;
 
 const ItemTitle = styled.h3`
-  font-size: 1rem;
+  font-size: 1.1rem;
+  margin: 0;
 `;
 
-const ItemDetails = styled.p`
+const Price = styled.p`
   font-size: 0.9rem;
   color: #666;
-`;
-
-const Button = styled.button`
-  padding: 0.25rem 0.5rem;
-  margin: 0 0.5rem;
-  border: none;
-  background-color: #333;
-  color: #fff;
-  border-radius: 4px;
-
-  &:hover {
-    background-color: #555;
-  }
+  margin: 0;
 `;
 
 const QuantityContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: 0.5rem 0;
+  gap: 0.5rem;
+`;
+
+const QuantityButton = styled.button`
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+const QuantityDisplay = styled.p`
+  margin: 0;
+  font-size: 1rem;
+  font-weight: bold;
+`;
+
+const RemoveButton = styled.button`
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-left: 1rem;
+
+  &:hover {
+    background-color: #c82333;
+  }
+`;
+
+const TotalAmount = styled.div`
+  margin-top: 2rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: right;
 `;
 
 function CartPage() {
-  const { cart, removeFromCart, updateQuantity } = useCart();
+  const { cart, updateCartQuantity, removeFromCart } = useCart();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [itemToRemove, setItemToRemove] = useState(null);
+
+  const handleQuantityChange = (id, increment) => {
+    const newQuantity = cart.find(item => item.id === id)?.quantity + increment;
+    if (newQuantity > 0) {
+      updateCartQuantity(id, newQuantity);
+    }
+  };
+
+  const handleRemove = (id) => {
+    setItemToRemove(id);
+    setModalOpen(true);
+  };
+
+  const confirmRemove = () => {
+    if (itemToRemove !== null) {
+      removeFromCart(itemToRemove);
+      setModalOpen(false);
+    }
+  };
+
+  const totalAmount = cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
 
   return (
     <CartContainer>
       <h2>Your Cart</h2>
-      {cart.map((item, index) => (
-        <CartItem key={index}>
-          <ItemTitle>{item.title}</ItemTitle>
-          <ItemDetails>Price: ${item.price}</ItemDetails>
+      {cart.map((item) => (
+        <CartItem key={item.id}>
+          <ItemDetails>
+            <ItemTitle>{item.title}</ItemTitle>
+            <Price>Price: ${item.price}</Price>
+          </ItemDetails>
           <QuantityContainer>
-            <Button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</Button>
-            <span>{item.quantity}</span>
-            <Button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</Button>
+            <QuantityButton onClick={() => handleQuantityChange(item.id, -1)}>-</QuantityButton>
+            <QuantityDisplay>{item.quantity}</QuantityDisplay>
+            <QuantityButton onClick={() => handleQuantityChange(item.id, 1)}>+</QuantityButton>
           </QuantityContainer>
-          <Button onClick={() => removeFromCart(item.id)}>Remove</Button>
+          <RemoveButton onClick={() => handleRemove(item.id)}>Remove</RemoveButton>
         </CartItem>
       ))}
+      <TotalAmount>Total: ${totalAmount}</TotalAmount>
+      <ConfirmModal
+        isOpen={modalOpen}
+        onRequestClose={() => setModalOpen(false)}
+        onConfirm={confirmRemove}
+      />
     </CartContainer>
   );
 }

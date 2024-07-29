@@ -3,6 +3,15 @@ import styled from 'styled-components';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../hooks/useCart';
 
+// Styled components
+const Container = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+  justify-content: center;
+`;
+
 const Notification = styled.div`
   position: fixed;
   top: 1rem;
@@ -38,14 +47,16 @@ function ShopPage() {
   return (
     <div>
       <Notification show={showNotification}>Product added to cart!</Notification>
-      {products.map((product) => (
-        <ProductCard
-          key={product.id}
-          product={product}
-          addToCart={addToCart}
-          showNotification={handleShowNotification}
-        />
-      ))}
+      <Container>
+        {products.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            addToCart={addToCart}
+            showNotification={handleShowNotification}
+          />
+        ))}
+      </Container>
     </div>
   );
 }
