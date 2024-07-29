@@ -11,6 +11,8 @@ const DetailsContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 2rem;
+  min-height: calc(100vh - 200px); /* Adjust min-height based on the size of the footer */
+  overflow: auto; /* Enable scrolling if content exceeds viewport */
 `;
 
 const ImageContainer = styled.div`
@@ -33,6 +35,8 @@ const ContentContainer = styled.div`
   flex: 2;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
 `;
 
 const Title = styled.h2`
@@ -50,6 +54,47 @@ const Price = styled.p`
   color: #333;
   margin-bottom: 1rem;
 `;
+
+const SizeOptions = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+`;
+
+const SizeButton = styled.button`
+  padding: 0.5rem 1rem;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background-color: ${props => (props.$isSelected ? '#333' : '#fff')};
+  color: ${props => (props.$isSelected ? '#fff' : '#333')};
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  &:hover {
+    background-color: #555;
+    color: #fff;
+  }
+`;
+
+const ColorOptions = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+`;
+
+const ColorSwatch = styled.button`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: ${props => props.color};
+  border: 2px solid ${props => (props.$isSelected ? '#333' : '#ccc')}; /* Seçili değilken gri, seçiliyken siyah */
+  box-shadow: ${props => (props.$isSelected ? '0 0 0 4px rgba(0, 0, 0, 0.2)' : 'none')}; /* Seçili değilken gölge yok, seçiliyken hafif gölge */
+  cursor: pointer;
+  transition: border 0.3s ease, box-shadow 0.3s ease; /* Sınır ve gölge geçişleri */
+`;
+
+
+
 
 const QuantityContainer = styled.div`
   display: flex;
@@ -119,6 +164,8 @@ function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1); // State for quantity
+  const [selectedSize, setSelectedSize] = useState(null); // State for selected size
+  const [selectedColor, setSelectedColor] = useState(null); // State for selected color
   const { addToCart } = useCart(); // Get addToCart function from useCart
   const { favorites, addToFavorites, removeFromFavorites } = useFavorites(); // Get favorite functions
   const isFavorite = favorites.some((fav) => fav.id === product?.id); // Check if the product is a favorite
@@ -130,7 +177,7 @@ function ProductDetails() {
   }, [id]);
 
   const handleAddToCart = () => {
-    addToCart(product, quantity);
+    addToCart(product, quantity, selectedSize, selectedColor); // Include size and color in addToCart function
   };
 
   const handleFavoriteToggle = () => {
@@ -152,6 +199,27 @@ function ProductDetails() {
         <Title>{product.title}</Title>
         <Price>${product.price}</Price>
         <Description>{product.description}</Description>
+        <SizeOptions>
+          {['XS', 'S', 'M', 'L', 'XL'].map((size) => (
+            <SizeButton
+              key={size}
+              $isSelected={selectedSize === size}
+              onClick={() => setSelectedSize(size)}
+            >
+              {size}
+            </SizeButton>
+          ))}
+        </SizeOptions>
+        <ColorOptions>
+          {['#000000', '#ffffff', '#808080', '#a52a2a'].map((color) => (
+            <ColorSwatch
+              key={color}
+              color={color}
+              $isSelected={selectedColor === color}
+              onClick={() => setSelectedColor(color)}
+            />
+          ))}
+        </ColorOptions>
         <QuantityContainer>
           <QuantityButton onClick={() => setQuantity(Math.max(quantity - 1, 1))}>-</QuantityButton>
           <QuantityInput
