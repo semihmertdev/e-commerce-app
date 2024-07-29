@@ -1,9 +1,9 @@
 // src/components/ConfirmModal.jsx
+
 import React from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 
-// Modal component styled
 const StyledModal = styled(Modal)`
   display: flex;
   justify-content: center;
@@ -14,7 +14,7 @@ const StyledModal = styled(Modal)`
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1000; // Make sure it's above other content
+  z-index: 1000;
 `;
 
 const ModalContent = styled.div`
@@ -50,12 +50,21 @@ const CancelButton = styled(ModalButton)`
   }
 `;
 
-const ConfirmModal = ({ isOpen, onRequestClose, onConfirm }) => (
+const FavoriteButton = styled(ModalButton)`
+  background-color: #28a745;
+
+  &:hover {
+    background-color: #218838;
+  }
+`;
+
+const ConfirmModal = ({ isOpen, onRequestClose, onConfirm, onConfirmAndAddToFavorites }) => (
   <StyledModal isOpen={isOpen} onRequestClose={onRequestClose} ariaHideApp={false}>
     <ModalContent>
       <h2>Are you sure you want to remove this item from the cart?</h2>
       <div>
         <ModalButton onClick={onConfirm}>Yes, Remove</ModalButton>
+        <FavoriteButton onClick={onConfirmAndAddToFavorites}>Yes and Add to Favorites</FavoriteButton>
         <CancelButton onClick={onRequestClose}>Cancel</CancelButton>
       </div>
     </ModalContent>

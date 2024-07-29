@@ -1,5 +1,8 @@
+
+// src/pages/CartPage.jsx
 import React, { useState } from 'react';
 import { useCart } from '../hooks/useCart';
+import { useFavorites } from '../hooks/useFavorites'; // Yeni eklenen
 import styled from 'styled-components';
 import ConfirmModal from '../components/ConfirmModal';
 
@@ -85,6 +88,7 @@ const TotalAmount = styled.div`
 
 function CartPage() {
   const { cart, updateCartQuantity, removeFromCart } = useCart();
+  const { addToFavorites } = useFavorites(); // Yeni eklenen
   const [modalOpen, setModalOpen] = useState(false);
   const [itemToRemove, setItemToRemove] = useState(null);
 
@@ -95,14 +99,22 @@ function CartPage() {
     }
   };
 
-  const handleRemove = (id) => {
-    setItemToRemove(id);
+  const handleRemove = (item) => {
+    setItemToRemove(item);
     setModalOpen(true);
   };
 
   const confirmRemove = () => {
     if (itemToRemove !== null) {
-      removeFromCart(itemToRemove);
+      removeFromCart(itemToRemove.id);
+      setModalOpen(false);
+    }
+  };
+
+  const confirmRemoveAndAddToFavorites = () => {
+    if (itemToRemove !== null) {
+      removeFromCart(itemToRemove.id);
+      addToFavorites(itemToRemove);
       setModalOpen(false);
     }
   };
@@ -123,7 +135,7 @@ function CartPage() {
             <QuantityDisplay>{item.quantity}</QuantityDisplay>
             <QuantityButton onClick={() => handleQuantityChange(item.id, 1)}>+</QuantityButton>
           </QuantityContainer>
-          <RemoveButton onClick={() => handleRemove(item.id)}>Remove</RemoveButton>
+          <RemoveButton onClick={() => handleRemove(item)}>Remove</RemoveButton>
         </CartItem>
       ))}
       <TotalAmount>Total: ${totalAmount}</TotalAmount>
@@ -131,9 +143,11 @@ function CartPage() {
         isOpen={modalOpen}
         onRequestClose={() => setModalOpen(false)}
         onConfirm={confirmRemove}
+        onConfirmAndAddToFavorites={confirmRemoveAndAddToFavorites}
       />
     </CartContainer>
   );
 }
 
 export default CartPage;
+

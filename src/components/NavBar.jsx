@@ -64,6 +64,7 @@ function NavBar() {
       <div>
         <NavLink to="/">Home</NavLink>
         <NavLink to="/shop">Shop</NavLink>
+        <NavLink to="/favorites">Favorites</NavLink>
         <NavLink to="/cart">Cart ({cart.length})</NavLink>
       </div>
       <SearchContainer>
@@ -81,4 +82,4 @@ function NavBar() {
   );
 }
 
-export default NavBar;
+export default NavBar;  
