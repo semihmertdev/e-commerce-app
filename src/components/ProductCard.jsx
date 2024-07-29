@@ -1,4 +1,3 @@
-// src/components/ProductCard.jsx
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -47,7 +46,7 @@ const Button = styled.button`
   }
 `;
 
-function ProductCard({ product, addToCart }) {
+function ProductCard({ product, addToCart, showNotification }) {
   const [quantity, setQuantity] = useState(1);
 
   return (
@@ -55,15 +54,22 @@ function ProductCard({ product, addToCart }) {
       <Title>{product.title}</Title>
       <Price>${product.price}</Price>
       <QuantityContainer>
-        <Button onClick={() => setQuantity(quantity - 1)}>-</Button>
+        <Button onClick={() => setQuantity(Math.max(quantity - 1, 1))}>-</Button>
         <QuantityInput
           type="number"
           value={quantity}
-          onChange={(e) => setQuantity(Number(e.target.value))}
+          onChange={(e) => setQuantity(Math.max(Number(e.target.value), 1))}
         />
         <Button onClick={() => setQuantity(quantity + 1)}>+</Button>
       </QuantityContainer>
-      <Button onClick={() => addToCart(product, quantity)}>Add to Cart</Button>
+      <Button
+        onClick={() => {
+          addToCart(product, quantity);
+          showNotification();
+        }}
+      >
+        Add to Cart
+      </Button>
     </Card>
   );
 }
