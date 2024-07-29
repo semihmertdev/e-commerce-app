@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../hooks/useCart';
+import { useLocation } from 'react-router-dom';
 
 // Styled components
 const Container = styled.div`
@@ -26,16 +27,43 @@ const Notification = styled.div`
   transition: opacity 0.3s ease-in-out;
 `;
 
+const NoResults = styled.p`
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 2rem;
+`;
+
 function ShopPage() {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const { addToCart } = useCart();
   const [showNotification, setShowNotification] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     fetch('https://fakestoreapi.com/products')
       .then((res) => res.json())
-      .then((data) => setProducts(data));
+      .then((data) => {
+        setProducts(data);
+        setFilteredProducts(data);
+      });
   }, []);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const searchTerm = searchParams.get('search');
+    
+    if (searchTerm) {
+      const filtered = products.filter(product => 
+        product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredProducts(filtered);
+    } else {
+      setFilteredProducts(products);
+    }
+  }, [location.search, products]);
 
   const handleShowNotification = () => {
     setShowNotification(true);
@@ -48,14 +76,18 @@ function ShopPage() {
     <div>
       <Notification show={showNotification}>Product added to cart!</Notification>
       <Container>
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            addToCart={addToCart}
-            showNotification={handleShowNotification}
-          />
-        ))}
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              addToCart={addToCart}
+              showNotification={handleShowNotification}
+            />
+          ))
+        ) : (
+          <NoResults>No products found matching your search.</NoResults>
+        )}
       </Container>
     </div>
   );
