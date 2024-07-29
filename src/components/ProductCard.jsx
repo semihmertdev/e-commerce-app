@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useFavorites } from '../hooks/useFavorites';
-import { useCart } from '../hooks/useCart'; // useCart hook'unu import edin
+import { useCart } from '../hooks/useCart'; // Import useCart hook
 
 const HeartIcon = () => (
   <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -28,19 +28,6 @@ const Title = styled.h3`
 const Price = styled.p`
   font-size: 1rem;
   color: #888;
-`;
-
-const QuantityContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0.5rem 0;
-`;
-
-const QuantityInput = styled.input`
-  width: 40px;
-  text-align: center;
-  margin: 0 0.5rem;
 `;
 
 const Button = styled.button`
@@ -70,18 +57,16 @@ const FavoriteButton = styled.button`
   border: none;
   cursor: pointer;
   font-size: 1.5rem;
-  color: ${props => (props.$isFavorite ? 'red' : '#ccc')}; /* Stil güncelleme */
+  color: ${props => (props.$isFavorite ? 'red' : '#ccc')}; /* Update color based on favorite status */
 
   &:hover {
-    color: ${props => (props.$isFavorite ? '#e57373' : '#888')}; /* Stil güncelleme */
+    color: ${props => (props.$isFavorite ? '#e57373' : '#888')}; /* Update hover color */
   }
 `;
 
 function ProductCard({ product }) {
   const { favorites, addToFavorites, removeFromFavorites } = useFavorites();
-  const { addToCart } = useCart(); // useCart hook'undan addToCart fonksiyonunu alın
-  const [quantity, setQuantity] = useState(1);
-
+  const { addToCart } = useCart(); // Get addToCart from useCart hook
   const isFavorite = favorites.some((fav) => fav.id === product.id);
 
   const handleFavoriteToggle = (e) => {
@@ -94,8 +79,8 @@ function ProductCard({ product }) {
   };
 
   const handleAddToCart = (e) => {
-    e.preventDefault(); // Link'in varsayılan davranışını engelle
-    addToCart(product, quantity);
+    e.preventDefault(); // Prevent default link behavior
+    addToCart(product, 1); // Use default quantity of 1
   };
 
   return (
@@ -105,15 +90,6 @@ function ProductCard({ product }) {
         <Title>{product.title}</Title>
       </Link>
       <Price>${product.price}</Price>
-      <QuantityContainer>
-        <Button onClick={() => setQuantity(Math.max(quantity - 1, 1))}>-</Button>
-        <QuantityInput
-          type="number"
-          value={quantity}
-          onChange={(e) => setQuantity(Math.max(Number(e.target.value), 1))}
-        />
-        <Button onClick={() => setQuantity(quantity + 1)}>+</Button>
-      </QuantityContainer>
       <Button onClick={handleAddToCart}>
         Add to Cart
       </Button>

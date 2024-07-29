@@ -12,14 +12,17 @@ const CategoriesContainer = styled.div`
 
 const CategoryButton = styled.button`
   padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: white;
+  background-color: #FCC730;
+  color: black;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
+  text-transform: capitalize;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #FFD700;
+    transition: background-color 0.3s;
+
   }
 `;
 
