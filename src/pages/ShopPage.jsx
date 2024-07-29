@@ -1,8 +1,9 @@
+// src/pages/ShopPage.jsx
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../hooks/useCart';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 // Styled components
 const Container = styled.div`
@@ -78,12 +79,13 @@ function ShopPage() {
       <Container>
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              addToCart={addToCart}
-              showNotification={handleShowNotification}
-            />
+            <Link key={product.id} to={`/product/${product.id}`}>
+              <ProductCard
+                product={product}
+                addToCart={addToCart}
+                showNotification={handleShowNotification}
+              />
+            </Link>
           ))
         ) : (
           <NoResults>No products found matching your search.</NoResults>

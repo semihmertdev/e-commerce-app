@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
+// ... (önceki styled components aynı kalacak)
 const Card = styled.div`
   border: 1px solid #ccc;
   padding: 1rem;
@@ -46,28 +48,48 @@ const Button = styled.button`
   }
 `;
 
+const ProductImage = styled.img`
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+`;
+
+
 function ProductCard({ product, addToCart, showNotification }) {
   const [quantity, setQuantity] = useState(1);
 
+  const handleAddToCart = (e) => {
+    e.preventDefault(); // Link'in varsayılan davranışını engelle
+    addToCart(product, quantity);
+    showNotification();
+  };
+
   return (
     <Card>
-      <Title>{product.title}</Title>
+      <Link to={`/product/${product.id}`}>
+        <ProductImage src={product.image} alt={product.title} />
+        <Title>{product.title}</Title>
+      </Link>
       <Price>${product.price}</Price>
       <QuantityContainer>
-        <Button onClick={() => setQuantity(Math.max(quantity - 1, 1))}>-</Button>
+        <Button onClick={(e) => {
+          e.preventDefault();
+          setQuantity(Math.max(quantity - 1, 1));
+        }}>-</Button>
         <QuantityInput
           type="number"
           value={quantity}
-          onChange={(e) => setQuantity(Math.max(Number(e.target.value), 1))}
+          onChange={(e) => {
+            e.preventDefault();
+            setQuantity(Math.max(Number(e.target.value), 1));
+          }}
         />
-        <Button onClick={() => setQuantity(quantity + 1)}>+</Button>
+        <Button onClick={(e) => {
+          e.preventDefault();
+          setQuantity(quantity + 1);
+        }}>+</Button>
       </QuantityContainer>
-      <Button
-        onClick={() => {
-          addToCart(product, quantity);
-          showNotification();
-        }}
-      >
+      <Button onClick={handleAddToCart}>
         Add to Cart
       </Button>
     </Card>
@@ -75,3 +97,5 @@ function ProductCard({ product, addToCart, showNotification }) {
 }
 
 export default ProductCard;
+
+
