@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useCart } from '../hooks/useCart';
 import { useFavorites } from '../hooks/useFavorites';
 
+// Styled components
 const DetailsContainer = styled.div`
   padding: 1rem;
   max-width: 1000px;
@@ -148,63 +149,38 @@ const ColorSwatch = styled.button`
   transition: border 0.3s ease;
 `;
 
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ModalContent = styled.div`
-  background: #fff;
-  padding: 2rem;
-  border-radius: 8px;
-  text-align: center;
-  width: 80%;
-  max-width: 500px;
-`;
-
-const ModalButton = styled.button`
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  background-color: #333;
-  color: #fff;
-  border-radius: 4px;
-
-  &:hover {
-    background-color: #555;
-  }
-`;
-
 function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
-  const [showModal, setShowModal] = useState(false);
   const { addToCart } = useCart();
   const { favorites, addToFavorites, removeFromFavorites } = useFavorites();
   const isFavorite = favorites.some((fav) => fav.id === product?.id);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetch(`https://fakestoreapi.com/products/${id}`)
       .then((res) => res.json())
-      .then((data) => setProduct(data));
+      .then((data) => {
+        setProduct(data);
+        // Reset size and color for new product
+        setSelectedSize(null);
+        setSelectedColor(null);
+      });
   }, [id]);
 
   const handleAddToCart = () => {
-    if (!selectedSize || !selectedColor) {
+    if (!product) return;
+    if (
+      (product.category !== 'jewelery' && product.category !== 'electronics' && !selectedSize) ||
+      (product.category !== 'jewelery' && product.category !== 'electronics' && !selectedColor)
+    ) {
       setShowModal(true);
-    } else {
-      addToCart(product, quantity, selectedSize, selectedColor);
+      return;
     }
+    addToCart(product, quantity, selectedSize, selectedColor);
   };
 
   const handleFavoriteToggle = () => {
@@ -215,7 +191,7 @@ function ProductDetails() {
     }
   };
 
-  const handleCloseModal = () => {
+  const handleModalClose = () => {
     setShowModal(false);
   };
 
@@ -231,27 +207,31 @@ function ProductDetails() {
           <Title>{product.title}</Title>
           <Price>${product.price}</Price>
           <Description>{product.description}</Description>
-          <SizeContainer>
-            {['XS', 'S', 'M', 'L', 'XL'].map(size => (
-              <SizeButton
-                key={size}
-                $isSelected={selectedSize === size}
-                onClick={() => setSelectedSize(size)}
-              >
-                {size}
-              </SizeButton>
-            ))}
-          </SizeContainer>
-          <ColorContainer>
-            {['#000000', '#FFFFFF', '#808080', '#A52A2A'].map(color => (
-              <ColorSwatch
-                key={color}
-                color={color}
-                $isSelected={selectedColor === color}
-                onClick={() => setSelectedColor(color)}
-              />
-            ))}
-          </ColorContainer>
+          {product.category !== 'jewelery' && product.category !== 'electronics' && (
+            <>
+              <SizeContainer>
+                {['XS', 'S', 'M', 'L', 'XL'].map(size => (
+                  <SizeButton
+                    key={size}
+                    $isSelected={selectedSize === size}
+                    onClick={() => setSelectedSize(size)}
+                  >
+                    {size}
+                  </SizeButton>
+                ))}
+              </SizeContainer>
+              <ColorContainer>
+                {['#000000', '#FFFFFF', '#808080', '#A52A2A'].map(color => (
+                  <ColorSwatch
+                    key={color}
+                    color={color}
+                    $isSelected={selectedColor === color}
+                    onClick={() => setSelectedColor(color)}
+                  />
+                ))}
+              </ColorContainer>
+            </>
+          )}
           <QuantityContainer>
             <QuantityButton onClick={() => setQuantity(Math.max(quantity - 1, 1))}>-</QuantityButton>
             <QuantityInput
@@ -270,15 +250,34 @@ function ProductDetails() {
         </ContentContainer>
       </DetailsContainer>
       {showModal && (
-        <ModalOverlay>
+        <Modal>
           <ModalContent>
-            <p>Please select a size and color before adding the product to the cart.</p>
-            <ModalButton onClick={handleCloseModal}>Close</ModalButton>
+            <p>Please select all required options before adding to cart.</p>
+            <button onClick={handleModalClose}>Close</button>
           </ModalContent>
-        </ModalOverlay>
+        </Modal>
       )}
     </>
   );
 }
+
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+`;
+
+const ModalContent = styled.div`
+  background: #fff;
+  padding: 1rem;
+  border-radius: 4px;
+  text-align: center;
+`;
 
 export default ProductDetails;

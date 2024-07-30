@@ -20,9 +20,32 @@ const NoResults = styled.p`
   margin-top: 2rem;
 `;
 
+const FilterContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+`;
+
+const FilterButton = styled.button`
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: ${props => (props.selected ? '#333' : '#fff')};
+  color: ${props => (props.selected ? '#fff' : '#333')};
+  cursor: pointer;
+  margin: 0 0.5rem;
+
+  &:hover {
+    background-color: #555;
+    color: #fff;
+  }
+`;
+
 function ShopPage() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('All');
   const location = useLocation();
   const { favorites, addToFavorites, removeFromFavorites } = useFavorites();
 
@@ -32,6 +55,10 @@ function ShopPage() {
         const response = await fetch('https://fakestoreapi.com/products');
         const data = await response.json();
         setProducts(data);
+
+        // Extract unique categories
+        const uniqueCategories = ['All', ...new Set(data.map(product => product.category))];
+        setCategories(uniqueCategories);
         setFilteredProducts(data);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -46,15 +73,27 @@ function ShopPage() {
     const searchTerm = searchParams.get('search') || '';
     
     const filtered = products.filter(product => 
-      product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchTerm.toLowerCase())
+      (selectedCategory === 'All' || product.category === selectedCategory) &&
+      (product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     setFilteredProducts(filtered);
-  }, [location.search, products]);
+  }, [location.search, products, selectedCategory]);
 
   return (
     <div>
+      <FilterContainer>
+        {categories.map(category => (
+          <FilterButton
+            key={category}
+            selected={selectedCategory === category}
+            onClick={() => setSelectedCategory(category)}
+          >
+            {category}
+          </FilterButton>
+        ))}
+      </FilterContainer>
       <Container>
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
