@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 // Styled components
@@ -14,7 +15,7 @@ const Slide = styled.div`
   width: 60%; /* Set width to 60% of the screen width */
   height: 100%;
   background-image: url(${props => props.image});
-  background-size: cover%; /* Maintain aspect ratio */
+  background-size: cover; /* Maintain aspect ratio */
   background-position: center;
   transition: opacity 1s ease-in-out;
   opacity: ${props => (props.active === 'true' ? '1' : '0')};
@@ -90,6 +91,12 @@ const ProductCard = styled.div`
   width: 200px;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer; /* Indicate that the card is clickable */
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05); /* Slightly enlarge the card on hover */
+  }
 `;
 
 const ProductImage = styled.img`
@@ -201,11 +208,13 @@ const HomePage = () => {
         <h2>Featured Products</h2>
         <FeaturedProducts>
           {products.slice(0, 3).map(product => (
-            <ProductCard key={product.id}>
-              <ProductImage src={product.image} alt={product.title} />
-              <ProductTitle>{product.title}</ProductTitle>
-              <ProductPrice>${product.price}</ProductPrice>
-            </ProductCard>
+            <Link to={`/product/${product.id}`} key={product.id}>
+              <ProductCard>
+                <ProductImage src={product.image} alt={product.title} />
+                <ProductTitle>{product.title}</ProductTitle>
+                <ProductPrice>${product.price}</ProductPrice>
+              </ProductCard>
+            </Link>
           ))}
         </FeaturedProducts>
       </Section>
