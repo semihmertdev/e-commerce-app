@@ -15,7 +15,10 @@ const Card = styled.div`
   margin: 1rem;
   border-radius: 8px;
   width: 200px;
-  text-align: center;
+  height: 400px; /* Adjust the height as needed */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   position: relative;
   cursor: pointer;
   transition: transform 0.2s;
@@ -25,10 +28,14 @@ const Card = styled.div`
   }
 `;
 
+
 const Title = styled.h3`
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
   cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* Ensures text doesn't wrap */
 `;
 
 const Description = styled.p`
@@ -36,19 +43,33 @@ const Description = styled.p`
   color: #666;
   margin: 0.5rem 0;
   cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* Ensures text doesn't wrap */
 `;
 
+
 const Price = styled.p`
-  font-size: 1rem;
-  color: #888;
+  font-size: 1.4rem; /* Daha büyük font boyutu */
+  font-weight: bold; /* Kalın font ağırlığı */
+  color: #333; /* Daha koyu renk */
+  margin: 0.5rem 0;
   cursor: pointer;
+  text-align: center; /* Merkezde hizalama */
+  background-color: #f9f9f9; /* Hafif arka plan rengi */
+  padding: 0.5rem; /* Arka plan renginin etrafında boşluk */
+  border-radius: 4px; /* Hafif yuvarlatılmış köşeler */
+  border: 1px solid #ddd; /* Hafif bir sınır */
 `;
+
 
 const ProductImage = styled.img`
   width: 100%;
-  height: auto;
+  height: 200px; /* Sabit yükseklik */
+  object-fit: contain; /* Resmi kesmeden tümünü gösterir, ancak alanı kaplamayabilir */
   cursor: pointer;
 `;
+
 
 const FavoriteButton = styled.div`
   position: absolute;
