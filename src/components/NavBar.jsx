@@ -135,7 +135,7 @@ function NavBar() {
   return (
     <Nav>
       <NavLinksContainer>
-        <NavLink to="/">Yuvam Telekom</NavLink>
+        <NavLink to="/">E-comm</NavLink>
         <NavLink to="/shop">Shop</NavLink>
       </NavLinksContainer>
       <SearchContainer>

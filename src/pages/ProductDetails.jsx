@@ -22,14 +22,13 @@ const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f9f9f9;
-  border-radius: 10px;
 `;
 
 const ProductImage = styled.img`
   width: 100%;
-  height: auto;
-  display: block;
+  height: 500px; /* Sabit yükseklik */
+  object-fit: contain; /* Resmi kesmeden tümünü gösterir, ancak alanı kaplamayabilir */
+  cursor: pointer;
 `;
 
 const ContentContainer = styled.div`
@@ -149,6 +148,25 @@ const ColorSwatch = styled.button`
   transition: border 0.3s ease;
 `;
 
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+`;
+
+const ModalContent = styled.div`
+  background: #fff;
+  padding: 1rem;
+  border-radius: 4px;
+  text-align: center;
+`;
+
 function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -173,9 +191,10 @@ function ProductDetails() {
 
   const handleAddToCart = () => {
     if (!product) return;
+    const isSizeRequired = product.category !== 'jewelery' && product.category !== 'electronics';
     if (
-      (product.category !== 'jewelery' && product.category !== 'electronics' && !selectedSize) ||
-      (product.category !== 'jewelery' && product.category !== 'electronics' && !selectedColor)
+      (isSizeRequired && !selectedSize) ||
+      (isSizeRequired && !selectedColor)
     ) {
       setShowModal(true);
       return;
@@ -260,24 +279,5 @@ function ProductDetails() {
     </>
   );
 }
-
-const Modal = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.5);
-`;
-
-const ModalContent = styled.div`
-  background: #fff;
-  padding: 1rem;
-  border-radius: 4px;
-  text-align: center;
-`;
 
 export default ProductDetails;

@@ -28,7 +28,6 @@ const Card = styled.div`
   }
 `;
 
-
 const Title = styled.h3`
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
