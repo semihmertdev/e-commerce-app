@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import ProductCard from '../components/ProductCard'; 
 
 // Styled components
 const HeroSection = styled.div`
@@ -70,37 +71,6 @@ const FeaturedProducts = styled.div`
   margin-top: 2rem;
 `;
 
-const ProductCard = styled.div`
-  background-color: #f9f9f9;
-  padding: 1rem;
-  border-radius: 8px;
-  width: 200px;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-`;
-
-const ProductImage = styled.img`
-  width: 150px;
-  height: auto;
-  border-radius: 4px;
-  margin-bottom: 0.5rem;
-`;
-
-const ProductTitle = styled.h3`
-  font-size: 1.1rem;
-  margin: 0.5rem 0;
-`;
-
-const ProductPrice = styled.p`
-  font-size: 1rem;
-  color: #333;
-`;
-
 const DiscountSection = styled(Section)`
   background-color: #f4f4f4;
 `;
@@ -112,7 +82,8 @@ const HomePage = () => {
   const [randomOffers, setRandomOffers] = useState([]);
 
   const images = [
-    'https://img.freepik.com/free-photo/young-handsome-man-choosing-clothes-shop_1303-19722.jpg?t=st=1722302049~exp=1722305649~hmac=0eb2adf10026e52f378ae212ac7ec7caae0aa94c4c178be23fb4df4c8f156a85&w=1380','https://img.freepik.com/free-photo/top-view-smartphone-with-keyboard-charger_23-2149404179.jpg?t=st=1722302108~exp=1722305708~hmac=eca0e44b37999ad30091fce87e563d96773c1879755786bdb0599d769a25afc9&w=1380',
+    'https://img.freepik.com/free-photo/young-handsome-man-choosing-clothes-shop_1303-19722.jpg?t=st=1722302049~exp=1722305649~hmac=0eb2adf10026e52f378ae212ac7ec7caae0aa94c4c178be23fb4df4c8f156a85&w=1380',
+    'https://img.freepik.com/free-photo/top-view-smartphone-with-keyboard-charger_23-2149404179.jpg?t=st=1722302108~exp=1722305708~hmac=eca0e44b37999ad30091fce87e563d96773c1879755786bdb0599d769a25afc9&w=1380',
     'https://img.freepik.com/free-photo/model-demonstrating-earrings-ring_7502-7042.jpg?t=st=1722302145~exp=1722305745~hmac=b6d183ec69080378948058fb49a7e7ed6297791a5fcc8f1542b44b217b9a31fb&w=1380'
   ];
 
@@ -168,14 +139,8 @@ const HomePage = () => {
       <Section>
         <Title>Featured Products</Title>
         <FeaturedProducts>
-          {products.slice(0, 3).map(product => (
-            <Link to={`/product/${product.id}`} key={product.id}>
-              <ProductCard>
-                <ProductImage src={product.image} alt={product.title} />
-                <ProductTitle>{product.title}</ProductTitle>
-                <ProductPrice>${product.price}</ProductPrice>
-              </ProductCard>
-            </Link>
+          {products.slice(0, 5).map(product => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </FeaturedProducts>
       </Section>
@@ -183,14 +148,8 @@ const HomePage = () => {
       <DiscountSection>
         <Title>Discounted Products</Title>
         <FeaturedProducts>
-          {discountedProducts.slice(0, 3).map(product => (
-            <Link to={`/product/${product.id}`} key={product.id}>
-              <ProductCard>
-                <ProductImage src={product.image} alt={product.title} />
-                <ProductTitle>{product.title}</ProductTitle>
-                <ProductPrice>${product.discountedPrice.toFixed(2)}</ProductPrice>
-              </ProductCard>
-            </Link>
+          {discountedProducts.slice(0, 4).map(product => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </FeaturedProducts>
       </DiscountSection>
@@ -199,13 +158,7 @@ const HomePage = () => {
         <Title>Special Offers</Title>
         <FeaturedProducts>
           {randomOffers.map(product => (
-            <Link to={`/product/${product.id}`} key={product.id}>
-              <ProductCard>
-                <ProductImage src={product.image} alt={product.title} />
-                <ProductTitle>{product.title}</ProductTitle>
-                <ProductPrice>${product.price}</ProductPrice>
-              </ProductCard>
-            </Link>
+            <ProductCard key={product.id} product={product} />
           ))}
         </FeaturedProducts>
       </Section>
