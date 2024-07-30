@@ -1,10 +1,12 @@
+// CartPage.jsx
+
 import React, { useState } from 'react';
 import { useCart } from '../hooks/useCart';
 import { useFavorites } from '../hooks/useFavorites';
 import styled from 'styled-components';
 import ConfirmModal from '../components/ConfirmModal';
 import OrderCompleteModal from '../components/OrderCompleteModal';
-import EmptyCartModal from '../components/EmptyCartModal'; // Sepet boşken gösterilecek modal
+import EmptyCartModal from '../components/EmptyCartModal';
 
 const CartContainer = styled.div`
   padding: 2rem;
@@ -140,7 +142,7 @@ const CompleteOrderButton = styled.button`
 function CartPage() {
   const { cart, updateCartQuantity, removeFromCart, clearCart } = useCart();
   const { addToFavorites } = useFavorites();
-  const [modalOpen, setModalOpen] = useState(false);
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [itemToRemove, setItemToRemove] = useState(null);
   const [orderCompleteModalOpen, setOrderCompleteModalOpen] = useState(false);
   const [emptyCartModalOpen, setEmptyCartModalOpen] = useState(false);
@@ -154,13 +156,13 @@ function CartPage() {
 
   const handleRemove = (item) => {
     setItemToRemove(item);
-    setModalOpen(true);
+    setConfirmModalOpen(true);
   };
 
   const confirmRemove = () => {
     if (itemToRemove !== null) {
       removeFromCart(itemToRemove.id, itemToRemove.size, itemToRemove.color);
-      setModalOpen(false);
+      setConfirmModalOpen(false);
     }
   };
 
@@ -168,17 +170,17 @@ function CartPage() {
     if (itemToRemove !== null) {
       removeFromCart(itemToRemove.id, itemToRemove.size, itemToRemove.color);
       addToFavorites(itemToRemove);
-      setModalOpen(false);
+      setConfirmModalOpen(false);
     }
   };
 
   const handleCompleteOrder = () => {
     if (cart.length === 0) {
       setEmptyCartModalOpen(true);
-      return;
+    } else {
+      clearCart();
+      setOrderCompleteModalOpen(true);
     }
-    setOrderCompleteModalOpen(true);
-    clearCart(); // Sepeti sıfırla
   };
 
   const totalAmount = cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
@@ -210,8 +212,8 @@ function CartPage() {
       <TotalAmount>Total: ${totalAmount}</TotalAmount>
       <CompleteOrderButton onClick={handleCompleteOrder}>Complete Order</CompleteOrderButton>
       <ConfirmModal
-        isOpen={modalOpen}
-        onRequestClose={() => setModalOpen(false)}
+        isOpen={confirmModalOpen}
+        onRequestClose={() => setConfirmModalOpen(false)}
         onConfirm={confirmRemove}
         onConfirmAndAddToFavorites={confirmRemoveAndAddToFavorites}
         item={itemToRemove}

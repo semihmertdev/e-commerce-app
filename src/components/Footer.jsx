@@ -21,7 +21,7 @@ const NewsletterSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2rem; /* Space between the newsletter section and other content */
+  margin-bottom: 2rem;
 `;
 
 const FooterSectionsWrapper = styled.div`
@@ -49,27 +49,26 @@ const FooterTitle = styled.h4`
 `;
 
 const FooterLink = styled(Link)`
-  color: #f0f0f0; /* Match footer text color */
+  color: #f0f0f0;
   text-decoration: none;
   text-transform: capitalize;
-  
   display: block;
   margin: 0.5rem 0;
   font-weight: 500;
 
   &:hover {
-    color: #ff5722; /* Update color to match button */
+    color: #ff5722;
     text-decoration: underline;
   }
 `;
 
 const ExternalLink = styled.a`
-  color: #f0f0f0; /* Match footer text color */
+  color: #f0f0f0;
   text-decoration: none;
   font-weight: 500;
 
   &:hover {
-    color: #ff5722; /* Update color to match button */
+    color: #ff5722;
     text-decoration: none;
   }
 `;
@@ -81,7 +80,7 @@ const SocialMediaIcons = styled.div`
 
   a {
     color: #f0f0f0;
-    font-size: 2rem; /* Set the font size to match the PaymentIcons */
+    font-size: 2rem;
     transition: color 0.3s;
 
     &:hover {
@@ -133,8 +132,8 @@ const PaymentIcons = styled.div`
   gap: 0.75rem;
 
   svg {
-    width: 2rem; /* Set the width to 2rem */
-    height: 2rem; /* Set the height to 2rem */
+    width: 2rem;
+    height: 2rem;
     color: #f0f0f0;
     transition: color 0.3s;
 
@@ -186,13 +185,13 @@ const Footer = () => (
       <FooterSection>
         <FooterTitle>Follow Us</FooterTitle>
         <SocialMediaIcons>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
             <FaFacebookF />
           </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
             <FaTwitter />
           </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
             <FaInstagram />
           </a>
         </SocialMediaIcons>
@@ -201,9 +200,9 @@ const Footer = () => (
       <FooterSection>
         <FooterTitle>Payment Methods</FooterTitle>
         <PaymentIcons>
-          <SiVisa />
-          <SiMastercard />
-          <SiPaypal />
+          <SiVisa aria-label="Visa" />
+          <SiMastercard aria-label="Mastercard" />
+          <SiPaypal aria-label="Paypal" />
         </PaymentIcons>
       </FooterSection>
     </FooterSectionsWrapper>
@@ -215,3 +214,4 @@ const Footer = () => (
 );
 
 export default Footer;
+  

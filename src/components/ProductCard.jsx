@@ -15,7 +15,7 @@ const Card = styled.div`
   margin: 1rem;
   border-radius: 8px;
   width: 200px;
-  height: 400px; /* Adjust the height as needed */
+  height: 400px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -34,7 +34,7 @@ const Title = styled.h3`
   cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap; /* Ensures text doesn't wrap */
+  white-space: nowrap;
 `;
 
 const Description = styled.p`
@@ -44,31 +44,28 @@ const Description = styled.p`
   cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap; /* Ensures text doesn't wrap */
+  white-space: nowrap;
 `;
-
 
 const Price = styled.p`
-  font-size: 1.4rem; /* Daha büyük font boyutu */
-  font-weight: bold; /* Kalın font ağırlığı */
-  color: #333; /* Daha koyu renk */
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
   margin: 0.5rem 0;
   cursor: pointer;
-  text-align: center; /* Merkezde hizalama */
-  background-color: #f9f9f9; /* Hafif arka plan rengi */
-  padding: 0.5rem; /* Arka plan renginin etrafında boşluk */
-  border-radius: 4px; /* Hafif yuvarlatılmış köşeler */
-  border: 1px solid #ddd; /* Hafif bir sınır */
+  text-align: center;
+  background-color: #f9f9f9;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
 `;
-
 
 const ProductImage = styled.img`
   width: 100%;
-  height: 200px; /* Sabit yükseklik */
-  object-fit: contain; /* Resmi kesmeden tümünü gösterir, ancak alanı kaplamayabilir */
+  height: 200px;
+  object-fit: contain;
   cursor: pointer;
 `;
-
 
 const FavoriteButton = styled.div`
   position: absolute;
@@ -90,7 +87,7 @@ function ProductCard({ product }) {
   const isFavorite = favorites.some((fav) => fav.id === product.id);
 
   const handleFavoriteToggle = (e) => {
-    e.stopPropagation(); // Stop the event from propagating up to the Card component
+    e.stopPropagation();
     if (isFavorite) {
       removeFromFavorites(product);
     } else {
@@ -103,12 +100,16 @@ function ProductCard({ product }) {
   };
 
   return (
-    <Card onClick={handleProductClick}>
+    <Card onClick={handleProductClick} data-testid="product-card">
       <ProductImage src={product.image} alt={product.title} />
       <Title>{product.title}</Title>
       <Description>{product.description}</Description>
       <Price>${product.price}</Price>
-      <FavoriteButton $isFavorite={isFavorite} onClick={handleFavoriteToggle}>
+      <FavoriteButton
+        $isFavorite={isFavorite}
+        onClick={handleFavoriteToggle}
+        data-testid="favorite-button" // Added data-testid for testing
+      >
         <HeartIcon />
       </FavoriteButton>
     </Card>
