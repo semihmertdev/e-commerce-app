@@ -8,6 +8,12 @@ const FavoritesContainer = styled.div`
   margin: auto;
 `;
 
+const FavoritesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+`;
+
 const NoFavorites = styled.p`
   text-align: center;
   font-size: 1.2rem;
@@ -22,13 +28,15 @@ function FavoritesPage() {
     <FavoritesContainer>
       <h2>Your Favorites</h2>
       {favorites.length > 0 ? (
-        favorites.map((product) => (
-          <ProductCard
-            key={`${product.id}-${product.title}-${Date.now()}`}
-            product={product}
-            removeFromFavorites={removeFromFavorites}
-          />
-        ))
+        <FavoritesGrid>
+          {favorites.map((product) => (
+            <ProductCard
+              key={product.id} // Use a stable key
+              product={product}
+              removeFromFavorites={removeFromFavorites}
+            />
+          ))}
+        </FavoritesGrid>
       ) : (
         <NoFavorites>No products in your favorites yet.</NoFavorites>
       )}
