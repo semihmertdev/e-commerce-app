@@ -6,17 +6,27 @@ import { FaHome, FaShoppingCart, FaHeart, FaSignInAlt, FaSearch } from 'react-ic
 
 const Nav = styled.nav`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  padding: 2rem;
+  padding: 1rem;
   background-color: #fff;
   border-bottom: 1px solid #ddd;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `;
 
 const NavLinksContainer = styled.div`
   display: flex;
   width: 100%;
   gap: 1rem;
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    justify-content: flex-start;
+  }
 `;
 
 const NavLink = styled(Link)`
@@ -37,7 +47,12 @@ const SearchContainer = styled.div`
   position: relative;
   width: 50%;
   max-width: 600px;
-  transition: width 1s ease, filter 0.3s ease;
+  margin: 1rem 0;
+   transition: width 1s ease;
+
+  @media (min-width: 768px) {
+    margin: 0;
+  }
 
   &:hover {
     filter: drop-shadow(0 0 0.75rem #ccc);
@@ -46,7 +61,7 @@ const SearchContainer = styled.div`
 
   &:focus-within {
     filter: drop-shadow(0 0 0.75rem #ccc);
-    width: 60%;
+    width: 100%;
   }
 `;
 
@@ -86,9 +101,15 @@ const SearchButton = styled.button`
 
 const IconLinksContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   width: 100%;
   gap: 1rem;
+  margin-top: 1rem;
+
+  @media (min-width: 768px) {
+    justify-content: flex-end;
+    margin-top: 0;
+  }
 `;
 
 const IconLink = styled(NavLink)`
