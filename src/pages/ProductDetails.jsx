@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useCart } from '../hooks/useCart';
 import { useFavorites } from '../hooks/useFavorites';
+import { toast } from 'react-toastify'; // Import toast
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS for react-toastify
 
 // Styled components
 const DetailsContainer = styled.div`
@@ -26,8 +28,8 @@ const ImageContainer = styled.div`
 
 const ProductImage = styled.img`
   width: 100%;
-  height: 500px; /* Sabit yükseklik */
-  object-fit: contain; /* Resmi kesmeden tümünü gösterir, ancak alanı kaplamayabilir */
+  height: 500px; /* Fixed height */
+  object-fit: contain; /* Shows the entire image without cropping */
   cursor: pointer;
 `;
 
@@ -200,6 +202,7 @@ function ProductDetails() {
       return;
     }
     addToCart(product, quantity, selectedSize, selectedColor);
+    toast.success('Product added to cart!'); // Show success toast message
   };
 
   const handleFavoriteToggle = () => {

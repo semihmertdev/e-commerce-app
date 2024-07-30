@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import { CartProvider } from './hooks/useCart';
 import { FavoritesProvider } from './hooks/useFavorites';
 import GlobalStyle from './globalStyles';
+import { ToastContainer } from 'react-toastify'; // Import ToastContainer
 
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/favorites" element={<FavoritesPage />} />
           </Routes>
-          <Footer /> {/* Add the Footer component here */}
+          <Footer />
+          <ToastContainer /> {/* Add ToastContainer to display notifications */}
         </Router>
       </FavoritesProvider>
     </CartProvider>
