@@ -6,15 +6,22 @@ import { SiVisa, SiMastercard, SiPaypal } from 'react-icons/si';
 
 // Styled components
 const FooterContainer = styled.footer`
-  background-color: #282c34;
+  background-color: #333;
   color: #f0f0f0;
   padding: 2rem 1rem;
   display: flex;
-  flex-direction: column; /* Stack sections vertically */
+  flex-direction: column;
   gap: 2rem;
   font-size: 0.9rem;
   position: relative;
   overflow: hidden;
+`;
+
+const NewsletterSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem; /* Space between the newsletter section and other content */
 `;
 
 const FooterSectionsWrapper = styled.div`
@@ -35,21 +42,35 @@ const FooterTitle = styled.h4`
   margin-bottom: 1rem;
   font-size: 1.4rem;
   font-weight: 600;
-  border-bottom: 2px solid #007bff;
+  border-bottom: 2px solid #ff5722;
   display: inline-block;
   padding-bottom: 0.5rem;
+  text-transform: uppercase;
 `;
 
 const FooterLink = styled(Link)`
-  color: #f0f0f0;
+  color: #f0f0f0; /* Match footer text color */
   text-decoration: none;
+  text-transform: capitalize;
+  
   display: block;
   margin: 0.5rem 0;
   font-weight: 500;
 
   &:hover {
-    color: #007bff;
+    color: #ff5722; /* Update color to match button */
     text-decoration: underline;
+  }
+`;
+
+const ExternalLink = styled.a`
+  color: #f0f0f0; /* Match footer text color */
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    color: #ff5722; /* Update color to match button */
+    text-decoration: none;
   }
 `;
 
@@ -60,11 +81,11 @@ const SocialMediaIcons = styled.div`
 
   a {
     color: #f0f0f0;
-    font-size: 2rem;
+    font-size: 2rem; /* Set the font size to match the PaymentIcons */
     transition: color 0.3s;
 
     &:hover {
-      color: #007bff;
+      color: #ff5722;
     }
   }
 `;
@@ -80,7 +101,7 @@ const NewsletterForm = styled.form`
     flex: 1;
     padding: 0.75rem;
     border-radius: 4px;
-    border: 1px solid #007bff;
+    border: 1px solid #ff5722;
     background-color: #fff;
     color: #333;
     box-sizing: border-box;
@@ -88,10 +109,10 @@ const NewsletterForm = styled.form`
 
   button {
     padding: 0.75rem 1rem;
-    background-color: #007bff;
-    border: 1px solid #007bff;
+    background-color: #ff5722;
+    border: 3px solid #ff5722;
     color: #fff;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s, border-color 0.3s;
     font-weight: 600;
@@ -99,8 +120,9 @@ const NewsletterForm = styled.form`
     box-sizing: border-box;
 
     &:hover {
-      background-color: #0056b3;
-      border-color: #0056b3;
+      background-color: #fff;
+      color: #ff5722;
+      border-color: #ff5722;
     }
   }
 `;
@@ -111,13 +133,13 @@ const PaymentIcons = styled.div`
   gap: 0.75rem;
 
   svg {
-    width: 2rem;
-    height: 2rem;
+    width: 2rem; /* Set the width to 2rem */
+    height: 2rem; /* Set the height to 2rem */
     color: #f0f0f0;
     transition: color 0.3s;
 
     &:hover {
-      color: #007bff;
+      color: #ff5722;
     }
   }
 `;
@@ -131,13 +153,21 @@ const FooterBottom = styled.div`
   color: #888;
   margin-top: 2rem;
   padding: 1rem 0;
-  background-color: #282c34;
+  background-color: #333;
   position: relative;
   z-index: 1;
 `;
 
 const Footer = () => (
   <FooterContainer>
+    <NewsletterSection>
+      <FooterTitle>Newsletter Signup</FooterTitle>
+      <NewsletterForm>
+        <input type="email" placeholder="Enter your email" />
+        <button type="submit">Subscribe</button>
+      </NewsletterForm>
+    </NewsletterSection>
+
     <FooterSectionsWrapper>
       <FooterSection>
         <FooterTitle>Company</FooterTitle>
@@ -149,8 +179,8 @@ const Footer = () => (
 
       <FooterSection>
         <FooterTitle>Contact Us</FooterTitle>
-        <p>Email: <a href="mailto:support@example.com">support@example.com</a></p>
-        <p>Phone: <a href="tel:+1234567890">+1 234 567 890</a></p>
+        <p>Email: <ExternalLink href="mailto:support@example.com">support@example.com</ExternalLink></p>
+        <p>Phone: <ExternalLink href="tel:+1234567890">+1 234 567 890</ExternalLink></p>
       </FooterSection>
 
       <FooterSection>
@@ -169,14 +199,6 @@ const Footer = () => (
       </FooterSection>
 
       <FooterSection>
-        <FooterTitle>Newsletter Signup</FooterTitle>
-        <NewsletterForm>
-          <input type="email" placeholder="Enter your email" />
-          <button type="submit">Subscribe</button>
-        </NewsletterForm>
-      </FooterSection>
-
-      <FooterSection>
         <FooterTitle>Payment Methods</FooterTitle>
         <PaymentIcons>
           <SiVisa />
@@ -187,7 +209,7 @@ const Footer = () => (
     </FooterSectionsWrapper>
 
     <FooterBottom>
-      <p>&copy; {new Date().getFullYear()} Your Company Name. All rights reserved.</p>
+      <p>&copy; {new Date().getFullYear()} Semih Mert. All rights reserved.</p>
     </FooterBottom>
   </FooterContainer>
 );
