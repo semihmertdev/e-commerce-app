@@ -1,4 +1,3 @@
-// src/pages/CartPage.jsx
 import React, { useState } from 'react';
 import { useCart } from '../hooks/useCart';
 import { useFavorites } from '../hooks/useFavorites';

@@ -1,5 +1,4 @@
-// src/hooks/useFavorites.jsx
-import React, { createContext, useContext, useState } from 'react';
+import { useState, createContext, useContext } from 'react';
 
 const FavoritesContext = createContext();
 
@@ -7,7 +6,9 @@ export const FavoritesProvider = ({ children }) => {
   const [favorites, setFavorites] = useState([]);
 
   const addToFavorites = (product) => {
-    setFavorites((prevFavorites) => [...prevFavorites, product]);
+    if (!favorites.some((fav) => fav.id === product.id)) {
+      setFavorites((prevFavorites) => [...prevFavorites, product]);
+    }
   };
 
   const removeFromFavorites = (product) => {

@@ -1,5 +1,3 @@
-// src/pages/FavoritesPage.jsx
-
 import { useFavorites } from '../hooks/useFavorites';
 import styled from 'styled-components';
 import ProductCard from '../components/ProductCard';
@@ -26,9 +24,8 @@ function FavoritesPage() {
       {favorites.length > 0 ? (
         favorites.map((product) => (
           <ProductCard
-            key={product.id}
+            key={`${product.id}-${product.title}-${Date.now()}`}
             product={product}
-            addToCart={() => {}}
             removeFromFavorites={removeFromFavorites}
           />
         ))

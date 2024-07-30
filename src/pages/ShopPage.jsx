@@ -1,8 +1,8 @@
-// src/pages/ShopPage.jsx
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ProductCard from '../components/ProductCard';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useFavorites } from '../hooks/useFavorites';
 
 // Styled components
 const Container = styled.div`
@@ -23,6 +23,8 @@ const NoResults = styled.p`
 function ShopPage() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const location = useLocation();
+  const { favorites, addToFavorites, removeFromFavorites } = useFavorites();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -56,9 +58,13 @@ function ShopPage() {
       <Container>
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
-            <Link key={product.id} to={`/product/${product.id}`}>
-              <ProductCard product={product} />
-            </Link>
+            <ProductCard
+              key={product.id}
+              product={product}
+              isFavorite={favorites.some((fav) => fav.id === product.id)}
+              addToFavorites={addToFavorites}
+              removeFromFavorites={removeFromFavorites}
+            />
           ))
         ) : (
           <NoResults>No products found matching your search.</NoResults>
