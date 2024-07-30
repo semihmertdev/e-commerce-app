@@ -20,8 +20,8 @@ const Slide = styled.div`
   background-size: cover;
   background-position: center;
   transition: opacity 1s ease-in-out;
-  opacity: ${props => (props.active ? '1' : '0')};
-  z-index: ${props => (props.active ? '1' : '0')};
+  opacity: ${props => (props.active === 'true' ? '1' : '0')};
+  z-index: ${props => (props.active === 'true' ? '1' : '0')};
 `;
 
 const CTAButton = styled(Link)`
@@ -50,7 +50,7 @@ const CTAButton = styled(Link)`
 
   &:active {
     transform: translateX(-50%) translateY(1px);
-}
+  }
 `;
 
 const Section = styled.section`
@@ -112,8 +112,7 @@ const HomePage = () => {
   const [randomOffers, setRandomOffers] = useState([]);
 
   const images = [
-    'https://img.freepik.com/free-photo/young-handsome-man-choosing-clothes-shop_1303-19722.jpg?t=st=1722302049~exp=1722305649~hmac=0eb2adf10026e52f378ae212ac7ec7caae0aa94c4c178be23fb4df4c8f156a85&w=1380',
-    'https://img.freepik.com/free-photo/top-view-smartphone-with-keyboard-charger_23-2149404179.jpg?t=st=1722302108~exp=1722305708~hmac=eca0e44b37999ad30091fce87e563d96773c1879755786bdb0599d769a25afc9&w=1380',
+    'https://img.freepik.com/free-photo/young-handsome-man-choosing-clothes-shop_1303-19722.jpg?t=st=1722302049~exp=1722305649~hmac=0eb2adf10026e52f378ae212ac7ec7caae0aa94c4c178be23fb4df4c8f156a85&w=1380','https://img.freepik.com/free-photo/top-view-smartphone-with-keyboard-charger_23-2149404179.jpg?t=st=1722302108~exp=1722305708~hmac=eca0e44b37999ad30091fce87e563d96773c1879755786bdb0599d769a25afc9&w=1380',
     'https://img.freepik.com/free-photo/model-demonstrating-earrings-ring_7502-7042.jpg?t=st=1722302145~exp=1722305745~hmac=b6d183ec69080378948058fb49a7e7ed6297791a5fcc8f1542b44b217b9a31fb&w=1380'
   ];
 
@@ -160,7 +159,7 @@ const HomePage = () => {
           <Slide
             key={index}
             image={image}
-            active={index === currentSlide}
+            active={index === currentSlide ? 'true' : 'false'}
           />
         ))}
         <CTAButton to="/shop">Shop Now</CTAButton>
@@ -215,7 +214,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-
-
-
