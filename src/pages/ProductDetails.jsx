@@ -148,12 +148,47 @@ const ColorSwatch = styled.button`
   transition: border 0.3s ease;
 `;
 
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalContent = styled.div`
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  width: 80%;
+  max-width: 500px;
+`;
+
+const ModalButton = styled.button`
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #333;
+  color: #fff;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: #555;
+  }
+`;
+
 function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const { addToCart } = useCart();
   const { favorites, addToFavorites, removeFromFavorites } = useFavorites();
   const isFavorite = favorites.some((fav) => fav.id === product?.id);
@@ -165,7 +200,11 @@ function ProductDetails() {
   }, [id]);
 
   const handleAddToCart = () => {
-    addToCart(product, quantity, selectedSize, selectedColor);
+    if (!selectedSize || !selectedColor) {
+      setShowModal(true);
+    } else {
+      addToCart(product, quantity, selectedSize, selectedColor);
+    }
   };
 
   const handleFavoriteToggle = () => {
@@ -176,55 +215,69 @@ function ProductDetails() {
     }
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   if (!product) return <p>Loading...</p>;
 
   return (
-    <DetailsContainer>
-      <ImageContainer>
-        <ProductImage src={product.image} alt={product.title} />
-      </ImageContainer>
-      <ContentContainer>
-        <Title>{product.title}</Title>
-        <Price>${product.price}</Price>
-        <Description>{product.description}</Description>
-        <SizeContainer>
-          {['XS', 'S', 'M', 'L', 'XL'].map(size => (
-            <SizeButton
-              key={size}
-              $isSelected={selectedSize === size}
-              onClick={() => setSelectedSize(size)}
-            >
-              {size}
-            </SizeButton>
-          ))}
-        </SizeContainer>
-        <ColorContainer>
-          {['#000000', '#FFFFFF', '#808080', '#A52A2A'].map(color => (
-            <ColorSwatch
-              key={color}
-              color={color}
-              $isSelected={selectedColor === color}
-              onClick={() => setSelectedColor(color)}
+    <>
+      <DetailsContainer>
+        <ImageContainer>
+          <ProductImage src={product.image} alt={product.title} />
+        </ImageContainer>
+        <ContentContainer>
+          <Title>{product.title}</Title>
+          <Price>${product.price}</Price>
+          <Description>{product.description}</Description>
+          <SizeContainer>
+            {['XS', 'S', 'M', 'L', 'XL'].map(size => (
+              <SizeButton
+                key={size}
+                $isSelected={selectedSize === size}
+                onClick={() => setSelectedSize(size)}
+              >
+                {size}
+              </SizeButton>
+            ))}
+          </SizeContainer>
+          <ColorContainer>
+            {['#000000', '#FFFFFF', '#808080', '#A52A2A'].map(color => (
+              <ColorSwatch
+                key={color}
+                color={color}
+                $isSelected={selectedColor === color}
+                onClick={() => setSelectedColor(color)}
+              />
+            ))}
+          </ColorContainer>
+          <QuantityContainer>
+            <QuantityButton onClick={() => setQuantity(Math.max(quantity - 1, 1))}>-</QuantityButton>
+            <QuantityInput
+              type="text"
+              value={quantity}
+              readOnly
             />
-          ))}
-        </ColorContainer>
-        <QuantityContainer>
-          <QuantityButton onClick={() => setQuantity(Math.max(quantity - 1, 1))}>-</QuantityButton>
-          <QuantityInput
-            type="text"
-            value={quantity}
-            readOnly
-          />
-          <QuantityButton onClick={() => setQuantity(quantity + 1)}>+</QuantityButton>
-        </QuantityContainer>
-        <ButtonsContainer>
-          <Button onClick={handleAddToCart}>Add to Cart</Button>
-          <FavoriteButton $isFavorite={isFavorite} onClick={handleFavoriteToggle}>
-            {isFavorite ? '❤️' : '🤍'}
-          </FavoriteButton>
-        </ButtonsContainer>
-      </ContentContainer>
-    </DetailsContainer>
+            <QuantityButton onClick={() => setQuantity(quantity + 1)}>+</QuantityButton>
+          </QuantityContainer>
+          <ButtonsContainer>
+            <Button onClick={handleAddToCart}>Add to Cart</Button>
+            <FavoriteButton $isFavorite={isFavorite} onClick={handleFavoriteToggle}>
+              {isFavorite ? '❤️' : '🤍'}
+            </FavoriteButton>
+          </ButtonsContainer>
+        </ContentContainer>
+      </DetailsContainer>
+      {showModal && (
+        <ModalOverlay>
+          <ModalContent>
+            <p>Please select a size and color before adding the product to the cart.</p>
+            <ModalButton onClick={handleCloseModal}>Close</ModalButton>
+          </ModalContent>
+        </ModalOverlay>
+      )}
+    </>
   );
 }
 
