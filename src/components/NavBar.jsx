@@ -1,127 +1,188 @@
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../hooks/useCart';
-import styled from 'styled-components';
-import { useState } from 'react';
-import { FaHome, FaShoppingCart, FaHeart, FaSignInAlt, FaSearch } from 'react-icons/fa';
+import styled, { createGlobalStyle } from 'styled-components';
+import { FaShoppingCart, FaHeart, FaSignInAlt, FaSearch, FaBars } from 'react-icons/fa';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+`;
+
+const NavWrapper = styled.div`
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+`;
 
 const Nav = styled.nav`
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
   padding: 1rem;
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
+  max-width: 1200px;
+  margin: 0 auto;
+`;
 
-  @media (min-width: 768px) {
-    flex-direction: row;
-    justify-content: space-between;
+const LogoContainer = styled.div`
+  flex: 1;
+  @media (max-width: 768px) {
+    order: 1;
   }
 `;
 
-const NavLinksContainer = styled.div`
-  display: flex;
-  width: 100%;
-  gap: 1rem;
-  justify-content: center;
-
-  @media (min-width: 768px) {
-    justify-content: flex-start;
-  }
-`;
-
-const NavLink = styled(Link)`
+const Logo = styled(Link)`
+  font-size: 1.5rem;
+  font-weight: bold;
   color: #333;
   text-decoration: none;
-  font-size: 1.2rem;
-  font-weight: bold;
-  padding: 0.5rem;
-  transition: transform 1s ease;
+  transition: color 0.3s ease-in-out;
 
   &:hover {
-    transform: scale(1.1);
     color: #FCC730;
   }
 `;
 
 const SearchContainer = styled.div`
-  position: relative;
-  width: 50%;
-  max-width: 600px;
-  margin: 1rem 0;
-   transition: width 1s ease;
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  margin: 0 1rem;
 
-  @media (min-width: 768px) {
-    margin: 0;
-  }
-
-  &:hover {
-    filter: drop-shadow(0 0 0.75rem #ccc);
-    width: 60%;
-  }
-
-  &:focus-within {
-    filter: drop-shadow(0 0 0.75rem #ccc);
-    width: 100%;
+  @media (max-width: 768px) {
+    flex: 100%;
+    order: 3;
+    margin-top: 1rem;
   }
 `;
 
-const SearchInput = styled.input.attrs({ type: 'text' })`
-  background-color: #fff;
-  height: 2.5rem;
-  padding: 0 2rem 0 1rem;
-  border: 1px solid #ccc;
-  border-radius: 9999px;
-  font-size: 1.2rem;
+const SearchForm = styled.form`
+  display: flex;
   width: 100%;
-  box-sizing: border-box;
-  outline: none;
+  max-width: 400px;
+  position: relative;
+`;
+
+const SearchInput = styled.input`
+  flex: 1;
+  padding: 0.5rem 3rem 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover, &:focus {
+    border-color: #FCC730;
+    box-shadow: 0 0 8px rgba(252, 199, 48, 0.3);
+  }
 `;
 
 const SearchButton = styled.button`
   position: absolute;
-  right: 1rem;
   top: 50%;
+  right: 0.5rem;
   transform: translateY(-50%);
-  background-color: transparent;
+  padding: 0.5rem;
   border: none;
+  border-radius: 10px;
   cursor: pointer;
-  padding: 0;
-  
-  svg {
-    width: 1rem;
-    height: 1rem;
-    fill: #333;
-    transition: fill 0.3s ease;
-  }
-
-  &:hover svg {
-    fill: #FCC730;
-  }
-`;
-
-const IconLinksContainer = styled.div`
+  font-size: 1rem;
   display: flex;
-  justify-content: center;
-  width: 100%;
-  gap: 1rem;
-  margin-top: 1rem;
-
-  @media (min-width: 768px) {
-    justify-content: flex-end;
-    margin-top: 0;
-  }
-`;
-
-const IconLink = styled(NavLink)`
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  font-size: 1.2rem;
+  justify-content: center;
+  background-color: white;
+`;
+
+const NavLinksContainer = styled.div`
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    order: 2;
+  }
+`;
+
+const IconLink = styled(Link)`
+  color: #333;
+  text-decoration: none;
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease-in-out;
+
+  svg {
+    font-size: 1.2rem;
+    margin-right: 0.3rem;
+  }
+
+  &:hover {
+    color: #FCC730;
+  }
+
+  @media (max-width: 768px) {
+    span {
+      display: none;
+    }
+  }
+`;
+
+const HamburgerMenu = styled.button`
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    display: block;
+    order: 1;
+  }
+`;
+
+const MobileMenu = styled.div`
+  display: ${props => props.isOpen ? 'flex' : 'none'};
+  flex-direction: column;
+  width: 100%;
+  padding: 1rem;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  transition: max-height 0.3s ease;
+
+  @media (min-width: 769px) {
+    display: none;
+  }
+`;
+
+const MobileMenuItem = styled.div`
+  width: 100%;
+`;
+
+const MobileDropdownContent = styled.div`
+  padding-left: 1rem;
+  border-left: 1px solid #ddd;
+  margin-left: 0.5rem;
+`;
+
+const MobileDropdownItem = styled(Link)`
+  color: #333;
+  text-decoration: none;
+  padding: 0.5rem 0;
+  display: block;
+  font-size: 0.9rem;
+
+  &:hover {
+    background-color: #f1f1f1;
+  }
 `;
 
 function NavBar() {
   const { cart } = useCart();
   const [searchTerm, setSearchTerm] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
 
   const handleSearch = (e) => {
@@ -132,37 +193,87 @@ function NavBar() {
     }
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleCategoryClick = (category) => {
+    const encodedCategory = encodeURIComponent(category);
+    navigate(`/shop?category=${encodedCategory}`);
+    setIsMobileMenuOpen(false);
+  };
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('https://fakestoreapi.com/products/categories');
+        const data = await response.json();
+        setCategories(['All', ...data]);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   return (
-    <Nav>
-      <NavLinksContainer>
-        <NavLink to="/">E-comm</NavLink>
-        <NavLink to="/shop">Shop</NavLink>
-      </NavLinksContainer>
-      <SearchContainer>
-        <form onSubmit={handleSearch}>
-          <SearchInput
-            type="search"
-            placeholder="Search"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <SearchButton type="submit">
-            <FaSearch />
-          </SearchButton>
-        </form>
-      </SearchContainer>
-      <IconLinksContainer>
-        <IconLink to="/"> 
-          <FaSignInAlt /> Log In
-        </IconLink>
-        <IconLink to="/favorites">
-          <FaHeart /> Favorites
-        </IconLink>
-        <IconLink to="/cart">
-          <FaShoppingCart /> Cart ({cart.length})
-        </IconLink>
-      </IconLinksContainer>
-    </Nav>
+    <>
+      <GlobalStyle />
+      <NavWrapper>
+        <Nav>
+          <HamburgerMenu onClick={toggleMobileMenu}>
+            <FaBars />
+          </HamburgerMenu>
+          
+          <LogoContainer>
+            <Logo to="/">E-comm</Logo>
+          </LogoContainer>
+
+          <SearchContainer>
+            <SearchForm onSubmit={handleSearch}>
+              <SearchInput
+                type="text"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <SearchButton type="submit">
+                <FaSearch />
+              </SearchButton>
+            </SearchForm>
+          </SearchContainer>
+
+          <NavLinksContainer>
+            <IconLink to="/login">
+              <FaSignInAlt />
+              <span>Login</span>
+            </IconLink>
+            <IconLink to="/favorites">
+              <FaHeart />
+              <span>Favorites</span>
+            </IconLink>
+            <IconLink to="/cart">
+              <FaShoppingCart />
+              <span>Cart ({cart.length})</span>
+            </IconLink>
+          </NavLinksContainer>
+        </Nav>
+      </NavWrapper>
+
+      <MobileMenu isOpen={isMobileMenuOpen}>
+        {categories.map(category => (
+          <MobileDropdownContent key={category}>
+            <MobileDropdownItem 
+              to={`/shop?category=${encodeURIComponent(category)}`}
+              onClick={() => handleCategoryClick(category)}
+            >
+              {category}
+            </MobileDropdownItem>
+          </MobileDropdownContent>
+        ))}
+      </MobileMenu>
+    </>
   );
 }
 

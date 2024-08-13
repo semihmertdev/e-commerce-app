@@ -1,7 +1,9 @@
+
+
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ProductCard from '../components/ProductCard';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useFavorites } from '../hooks/useFavorites';
 
 // Styled components
@@ -47,6 +49,7 @@ function ShopPage() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const location = useLocation();
+  const navigate = useNavigate();
   const { favorites, addToFavorites, removeFromFavorites } = useFavorites();
 
   useEffect(() => {
@@ -56,10 +59,8 @@ function ShopPage() {
         const data = await response.json();
         setProducts(data);
 
-        // Extract unique categories
         const uniqueCategories = ['All', ...new Set(data.map(product => product.category))];
         setCategories(uniqueCategories);
-        setFilteredProducts(data);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -71,15 +72,23 @@ function ShopPage() {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const searchTerm = searchParams.get('search') || '';
-    
-    const filtered = products.filter(product => 
-      (selectedCategory === 'All' || product.category === selectedCategory) &&
+    const categoryFromUrl = searchParams.get('category') || 'All';
+
+    setSelectedCategory(categoryFromUrl);
+
+    const filtered = products.filter(product =>
+      (categoryFromUrl === 'All' || product.category === categoryFromUrl) &&
       (product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.description.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     setFilteredProducts(filtered);
-  }, [location.search, products, selectedCategory]);
+  }, [location.search, products]);
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    navigate(`/shop?category=${encodeURIComponent(category)}`);
+  };
 
   return (
     <div>
@@ -88,7 +97,7 @@ function ShopPage() {
           <FilterButton
             key={category}
             selected={selectedCategory === category}
-            onClick={() => setSelectedCategory(category)}
+            onClick={() => handleCategoryChange(category)}
           >
             {category}
           </FilterButton>
