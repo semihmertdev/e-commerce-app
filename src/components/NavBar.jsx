@@ -102,6 +102,7 @@ const NavLinksContainer = styled.div`
 
   @media (max-width: 768px) {
     order: 2;
+    align-items: flex-start;
   }
 `;
 
@@ -114,8 +115,13 @@ const IconLink = styled(Link)`
   transition: color 0.3s ease-in-out;
 
   svg {
-    font-size: 1.2rem;
+    font-size: 1.5rem; /* Adjust icon size */
     margin-right: 0.3rem;
+  }
+
+  span {
+    display: inline-block;
+    font-size: 1rem;
   }
 
   &:hover {
@@ -130,15 +136,14 @@ const IconLink = styled(Link)`
 `;
 
 const HamburgerMenu = styled.button`
-  display: none;
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.5rem; /* Match icon size */
   cursor: pointer;
+  margin-left: 1rem;
 
-  @media (max-width: 768px) {
-    display: block;
-    order: 1;
+  @media (min-width: 769px) {
+    display: none;
   }
 `;
 
@@ -175,6 +180,35 @@ const MobileDropdownItem = styled(Link)`
 
   &:hover {
     background-color: #f1f1f1;
+  }
+`;
+
+const CategoriesContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center; /* Center items horizontally */
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const CategoryLink = styled(Link)`
+  color: #333;
+  text-decoration: none;
+  padding: 0.5rem 1rem; /* Adjusted padding for better appearance */
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: inline-flex; /* Ensure the link is treated as a flex item */
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: #f1f1f1;
+    color: #FCC730;
   }
 `;
 
@@ -222,9 +256,6 @@ function NavBar() {
       <GlobalStyle />
       <NavWrapper>
         <Nav>
-          <HamburgerMenu onClick={toggleMobileMenu}>
-            <FaBars />
-          </HamburgerMenu>
           
           <LogoContainer>
             <Logo to="/">E-comm</Logo>
@@ -245,6 +276,10 @@ function NavBar() {
           </SearchContainer>
 
           <NavLinksContainer>
+            <HamburgerMenu onClick={toggleMobileMenu}>
+              <FaBars />
+            </HamburgerMenu>
+
             <IconLink to="/login">
               <FaSignInAlt />
               <span>Login</span>
@@ -259,6 +294,18 @@ function NavBar() {
             </IconLink>
           </NavLinksContainer>
         </Nav>
+        
+        <CategoriesContainer>
+          {categories.map(category => (
+            <CategoryLink 
+              key={category}
+              to={`/shop?category=${encodeURIComponent(category)}`}
+              onClick={() => handleCategoryClick(category)}
+            >
+              {category}
+            </CategoryLink>
+          ))}
+        </CategoriesContainer>
       </NavWrapper>
 
       <MobileMenu isOpen={isMobileMenuOpen}>
@@ -278,3 +325,4 @@ function NavBar() {
 }
 
 export default NavBar;
+``
