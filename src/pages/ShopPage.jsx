@@ -37,6 +37,14 @@ const FilterContainer = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   margin: 1rem 0;
+
+  @media (max-width: 768px) {
+    display: flex;
+  }
+
+  @media (min-width: 769px) {
+    display: none;
+  }
 `;
 
 const FilterButton = styled.button`
