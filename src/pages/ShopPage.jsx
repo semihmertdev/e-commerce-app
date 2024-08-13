@@ -1,5 +1,3 @@
-
-
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ProductCard from '../components/ProductCard';
@@ -13,6 +11,14 @@ const Container = styled.div`
   gap: 1rem;
   padding: 1rem;
   justify-content: center;
+
+  @media (max-width: 768px) {
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.5rem;
+  }
 `;
 
 const NoResults = styled.p`
@@ -20,10 +26,15 @@ const NoResults = styled.p`
   font-size: 1.2rem;
   color: #666;
   margin-top: 2rem;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const FilterContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   margin: 1rem 0;
 `;
@@ -35,11 +46,21 @@ const FilterButton = styled.button`
   background-color: ${props => (props.selected ? '#333' : '#fff')};
   color: ${props => (props.selected ? '#fff' : '#333')};
   cursor: pointer;
-  margin: 0 0.5rem;
+  margin: 0.5rem;
 
   &:hover {
     background-color: #555;
     color: #fff;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.5rem;
+    font-size: 0.8rem;
   }
 `;
 
