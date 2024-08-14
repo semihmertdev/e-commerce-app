@@ -30,9 +30,9 @@ const CTAButton = styled(Link)`
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: white;
-  color: black;
-  border: 3px solid black;
+  background-color: #FCC730; /* Updated color */
+  color: white; /* Updated color */
+  border: 3px solid white; /* Updated color */
   padding: 1rem 2rem;
   font-size: 1rem;
   border-radius: 10px;
@@ -44,9 +44,9 @@ const CTAButton = styled(Link)`
   z-index: 2; /* Ensure it appears above slides */
 
   &:hover {
-    background-color: black;
-    color: white;
-    border: 3px solid white;
+    background-color: white; /* Updated color */
+    color: #FCC730; /* Updated color */
+    border: 3px solid #FCC730; /* Updated color */
   }
 
   &:active {
@@ -57,10 +57,12 @@ const CTAButton = styled(Link)`
 const Section = styled.section`
   padding: 2rem 1rem;
   text-align: center;
+  background-color: white; /* Updated color */
 `;
 
 const Title = styled.h2`
   margin-bottom: 1rem;
+  color: #FCC730; /* Updated color */
 `;
 
 const FeaturedProducts = styled.div`
@@ -69,10 +71,11 @@ const FeaturedProducts = styled.div`
   flex-wrap: wrap;
   gap: 1rem;
   margin-top: 2rem;
+  background-color: white; /* Updated color */
 `;
 
 const DiscountSection = styled(Section)`
-  background-color: #f4f4f4;
+  background-color: white; /* Updated color */
 `;
 
 const HomePage = () => {
@@ -82,9 +85,9 @@ const HomePage = () => {
   const [randomOffers, setRandomOffers] = useState([]);
 
   const images = [
-    'https://img.freepik.com/free-photo/young-handsome-man-choosing-clothes-shop_1303-19722.jpg?t=st=1722302049~exp=1722305649~hmac=0eb2adf10026e52f378ae212ac7ec7caae0aa94c4c178be23fb4df4c8f156a85&w=1380',
-    'https://img.freepik.com/free-photo/top-view-smartphone-with-keyboard-charger_23-2149404179.jpg?t=st=1722302108~exp=1722305708~hmac=eca0e44b37999ad30091fce87e563d96773c1879755786bdb0599d769a25afc9&w=1380',
-    'https://img.freepik.com/free-photo/model-demonstrating-earrings-ring_7502-7042.jpg?t=st=1722302145~exp=1722305745~hmac=b6d183ec69080378948058fb49a7e7ed6297791a5fcc8f1542b44b217b9a31fb&w=1380'
+    'https://c1.wallpaperflare.com/path/573/909/315/store-clothes-clothing-line-ccf59ee3d9dbe3d954b258c699e94963.jpg',
+    'https://c0.wallpaperflare.com/path/431/631/578/mouse-hardware-computer-electronics-441c0ed626d94da0dc05c9199af7387c.jpg',
+    'https://c1.wallpaperflare.com/path/500/166/557/jewelry-pendant-necklace-jewellery-8110e9aa10faa4fe351400c59f978bc7.jpg'
   ];
 
   useEffect(() => {

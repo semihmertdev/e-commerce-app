@@ -6,8 +6,8 @@ import { SiVisa, SiMastercard, SiPaypal } from 'react-icons/si';
 
 // Styled components
 const FooterContainer = styled.footer`
-  background-color: #333;
-  color: #f0f0f0;
+  background-color: #222;
+  color: #fff;
   padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
@@ -22,6 +22,9 @@ const NewsletterSection = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 2rem;
+  background-color: #333;
+  padding: 1rem;
+  border-radius: 8px;
 `;
 
 const FooterSectionsWrapper = styled.div`
@@ -40,16 +43,16 @@ const FooterSection = styled.div`
 
 const FooterTitle = styled.h4`
   margin-bottom: 1rem;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  border-bottom: 2px solid #ff5722;
+  border-bottom: 2px solid #FCC730;
   display: inline-block;
   padding-bottom: 0.5rem;
   text-transform: uppercase;
 `;
 
 const FooterLink = styled(Link)`
-  color: #f0f0f0;
+  color: #fff;
   text-decoration: none;
   text-transform: capitalize;
   display: block;
@@ -57,19 +60,19 @@ const FooterLink = styled(Link)`
   font-weight: 500;
 
   &:hover {
-    color: #ff5722;
+    color: #FCC730;
     text-decoration: underline;
   }
 `;
 
 const ExternalLink = styled.a`
-  color: #f0f0f0;
+  color: #fff;
   text-decoration: none;
   font-weight: 500;
 
   &:hover {
-    color: #ff5722;
-    text-decoration: none;
+    color: #FCC730;
+    text-decoration: underline;
   }
 `;
 
@@ -79,12 +82,13 @@ const SocialMediaIcons = styled.div`
   gap: 0.75rem;
 
   a {
-    color: #f0f0f0;
+    color: #fff;
     font-size: 2rem;
-    transition: color 0.3s;
+    transition: color 0.3s, transform 0.3s;
 
     &:hover {
-      color: #ff5722;
+      color: #FCC730;
+      transform: scale(1.1);
     }
   }
 `;
@@ -100,7 +104,7 @@ const NewsletterForm = styled.form`
     flex: 1;
     padding: 0.75rem;
     border-radius: 4px;
-    border: 1px solid #ff5722;
+    border: 1px solid #FCC730;
     background-color: #fff;
     color: #333;
     box-sizing: border-box;
@@ -108,10 +112,10 @@ const NewsletterForm = styled.form`
 
   button {
     padding: 0.75rem 1rem;
-    background-color: #ff5722;
-    border: 3px solid #ff5722;
+    background-color: #FCC730;
+    border: 2px solid #FCC730;
     color: #fff;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s, border-color 0.3s;
     font-weight: 600;
@@ -120,8 +124,8 @@ const NewsletterForm = styled.form`
 
     &:hover {
       background-color: #fff;
-      color: #ff5722;
-      border-color: #ff5722;
+      color: #FCC730;
+      border-color: #FCC730;
     }
   }
 `;
@@ -134,11 +138,11 @@ const PaymentIcons = styled.div`
   svg {
     width: 2rem;
     height: 2rem;
-    color: #f0f0f0;
+    color: #fff;
     transition: color 0.3s;
 
     &:hover {
-      color: #ff5722;
+      color: #FCC730;
     }
   }
 `;
@@ -152,7 +156,7 @@ const FooterBottom = styled.div`
   color: #888;
   margin-top: 2rem;
   padding: 1rem 0;
-  background-color: #333;
+  background-color: #222;
   position: relative;
   z-index: 1;
 `;
@@ -214,4 +218,3 @@ const Footer = () => (
 );
 
 export default Footer;
-  

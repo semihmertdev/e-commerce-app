@@ -9,12 +9,14 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #f4f4f4;
   }
 `;
 
 const NavWrapper = styled.div`
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 1rem 0;
 `;
 
 const Nav = styled.nav`
@@ -37,12 +39,12 @@ const LogoContainer = styled.div`
 const Logo = styled(Link)`
   font-size: 1.5rem;
   font-weight: bold;
-  color: #333;
+  color: #FCC730;
   text-decoration: none;
   transition: color 0.3s ease-in-out;
 
   &:hover {
-    color: #FCC730;
+    color: #333;
   }
 `;
 
@@ -93,7 +95,8 @@ const SearchButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: white;
+  background-color: #FCC730;
+  color: #fff;
 `;
 
 const NavLinksContainer = styled.div`
@@ -115,7 +118,7 @@ const IconLink = styled(Link)`
   transition: color 0.3s ease-in-out;
 
   svg {
-    font-size: 1.5rem; /* Adjust icon size */
+    font-size: 1.5rem;
     margin-right: 0.3rem;
   }
 
@@ -138,12 +141,16 @@ const IconLink = styled(Link)`
 const HamburgerMenu = styled.button`
   background: none;
   border: none;
-  font-size: 1.5rem; /* Match icon size */
+  font-size: 1.5rem;
   cursor: pointer;
   margin-left: 1rem;
 
   @media (min-width: 769px) {
     display: none;
+  }
+
+  &:hover {
+    color: #FCC730;
   }
 `;
 
@@ -161,10 +168,6 @@ const MobileMenu = styled.div`
   }
 `;
 
-const MobileMenuItem = styled.div`
-  width: 100%;
-`;
-
 const MobileDropdownContent = styled.div`
   padding-left: 1rem;
   border-left: 1px solid #ddd;
@@ -177,10 +180,13 @@ const MobileDropdownItem = styled(Link)`
   padding: 0.5rem 0;
   display: block;
   font-size: 0.9rem;
+  text-transform: capitalize;
+  border-bottom: 2px solid transparent;
 
   &:hover {
     background-color: #f1f1f1;
   }
+
 `;
 
 const CategoriesContainer = styled.div`
@@ -188,7 +194,7 @@ const CategoriesContainer = styled.div`
   flex-wrap: wrap;
   gap: 1rem;
   margin-top: 1rem;
-  justify-content: center; /* Center items horizontally */
+  justify-content: center;
 
   @media (max-width: 768px) {
     display: none;
@@ -198,17 +204,21 @@ const CategoriesContainer = styled.div`
 const CategoryLink = styled(Link)`
   color: #333;
   text-decoration: none;
-  padding: 0.5rem 1rem; /* Adjusted padding for better appearance */
-  border-radius: 10px;
-  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid #ccc;
   transition: background-color 0.3s ease, color 0.3s ease;
-  display: inline-flex; /* Ensure the link is treated as a flex item */
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  text-transform: capitalize;
 
   &:hover {
     background-color: #f1f1f1;
     color: #FCC730;
+  }
+
+  &.active {
+    border-bottom: 2px solid #FCC730;
   }
 `;
 
@@ -217,6 +227,7 @@ function NavBar() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [activeCategory, setActiveCategory] = useState(null);
   const navigate = useNavigate();
 
   const handleSearch = (e) => {
@@ -234,6 +245,7 @@ function NavBar() {
   const handleCategoryClick = (category) => {
     const encodedCategory = encodeURIComponent(category);
     navigate(`/shop?category=${encodedCategory}`);
+    setActiveCategory(category);
     setIsMobileMenuOpen(false);
   };
 
@@ -256,7 +268,6 @@ function NavBar() {
       <GlobalStyle />
       <NavWrapper>
         <Nav>
-          
           <LogoContainer>
             <Logo to="/">E-comm</Logo>
           </LogoContainer>
@@ -294,13 +305,14 @@ function NavBar() {
             </IconLink>
           </NavLinksContainer>
         </Nav>
-        
+
         <CategoriesContainer>
           {categories.map(category => (
             <CategoryLink 
               key={category}
               to={`/shop?category=${encodeURIComponent(category)}`}
               onClick={() => handleCategoryClick(category)}
+              className={activeCategory === category ? 'active' : ''}
             >
               {category}
             </CategoryLink>
@@ -314,6 +326,7 @@ function NavBar() {
             <MobileDropdownItem 
               to={`/shop?category=${encodeURIComponent(category)}`}
               onClick={() => handleCategoryClick(category)}
+              className={activeCategory === category ? 'active' : ''}
             >
               {category}
             </MobileDropdownItem>
@@ -325,4 +338,3 @@ function NavBar() {
 }
 
 export default NavBar;
-``

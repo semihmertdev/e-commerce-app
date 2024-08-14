@@ -48,6 +48,7 @@ const ItemDetails = styled.div`
 const ItemTitle = styled.h3`
   font-size: 1.2rem;
   margin: 0;
+  color: #FCC730; /* Updated color */
 `;
 
 const Price = styled.p`
@@ -77,7 +78,7 @@ const QuantityContainer = styled.div`
 `;
 
 const QuantityButton = styled.button`
-  background-color: #007bff;
+  background-color: #FCC730; /* Updated color */
   color: white;
   border: none;
   border-radius: 4px;
@@ -87,7 +88,7 @@ const QuantityButton = styled.button`
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #f7b900; /* Slightly darker yellow */
   }
 `;
 
@@ -98,7 +99,7 @@ const QuantityDisplay = styled.p`
 `;
 
 const RemoveButton = styled.button`
-  background-color: #dc3545;
+  background-color: #FCC730; /* Updated color */
   color: white;
   border: none;
   border-radius: 4px;
@@ -109,7 +110,7 @@ const RemoveButton = styled.button`
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #c82333;
+    background-color: #f7b900; /* Slightly darker yellow */
   }
 `;
 
@@ -118,10 +119,11 @@ const TotalAmount = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
   text-align: right;
+  color: #FCC730; /* Updated color */
 `;
 
 const CompleteOrderButton = styled.button`
-  background-color: #28a745;
+  background-color: #FCC730; /* Updated color */
   color: white;
   border: none;
   border-radius: 4px;
@@ -135,7 +137,7 @@ const CompleteOrderButton = styled.button`
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #218838;
+    background-color: #f7b900; /* Slightly darker yellow */
   }
 `;
 

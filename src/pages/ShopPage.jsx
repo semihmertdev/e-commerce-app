@@ -11,6 +11,7 @@ const Container = styled.div`
   gap: 1rem;
   padding: 1rem;
   justify-content: center;
+  background-color: white;
 
   @media (max-width: 768px) {
     gap: 0.5rem;
@@ -33,32 +34,30 @@ const NoResults = styled.p`
 `;
 
 const FilterContainer = styled.div`
-  display: flex;
+  display: none; /* Hide on larger screens */
   flex-wrap: wrap;
   justify-content: center;
-  margin: 1rem 0;
+  background-color: white;
+  padding: 0.5rem;
 
   @media (max-width: 768px) {
-    display: flex;
-  }
-
-  @media (min-width: 769px) {
-    display: none;
+    display: flex; /* Show only on mobile */
   }
 `;
 
 const FilterButton = styled.button`
   padding: 0.5rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: ${props => (props.selected ? '#333' : '#fff')};
-  color: ${props => (props.selected ? '#fff' : '#333')};
+  border: none;
+  border-bottom: 2px solid ${props => (props.selected ? '#FCC730' : '#ccc')}; /* Border color */
+  background-color: white;
+  color: ${props => (props.selected ? '#FCC730' : '#333')};
   cursor: pointer;
   margin: 0.5rem;
+  text-transform: capitalize; /* Capitalize category names */
+  font-size: 1rem;
 
   &:hover {
-    background-color: #555;
-    color: #fff;
+    background-color: #f1f1f1;
   }
 
   @media (max-width: 768px) {
@@ -128,7 +127,7 @@ function ShopPage() {
             selected={selectedCategory === category}
             onClick={() => handleCategoryChange(category)}
           >
-            {category}
+            {category.charAt(0).toUpperCase() + category.slice(1)}
           </FilterButton>
         ))}
       </FilterContainer>
