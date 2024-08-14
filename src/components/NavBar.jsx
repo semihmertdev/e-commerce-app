@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../hooks/useCart';
 import styled, { createGlobalStyle } from 'styled-components';
 import { FaShoppingCart, FaHeart, FaSignInAlt, FaSearch, FaBars } from 'react-icons/fa';
@@ -150,13 +150,17 @@ const HamburgerMenu = styled.button`
     display: none;
   }
 
+  @media (max-width: 768px) {
+    display: ${props => props.isShopPage ? 'none' : 'block'};
+  }
+
   &:hover {
     color: #FCC730;
   }
 `;
 
 const MobileMenu = styled.div`
-  display: ${props => props.isOpen ? 'flex' : 'none'};
+  display: ${props => props.isOpen && !props.isShopPage ? 'flex' : 'none'};
   flex-direction: column;
   width: 100%;
   padding: 1rem;
@@ -187,7 +191,6 @@ const MobileDropdownItem = styled(Link)`
   &:hover {
     background-color: #f1f1f1;
   }
-
 `;
 
 const CategoriesContainer = styled.div`
@@ -230,6 +233,7 @@ function NavBar() {
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -248,6 +252,10 @@ function NavBar() {
     navigate(`/shop?category=${encodedCategory}`);
     setActiveCategory(category);
     setIsMobileMenuOpen(false);
+  };
+
+  const isShopPage = () => {
+    return location.pathname === '/shop' || location.pathname.startsWith('/shop/');
   };
 
   useEffect(() => {
@@ -288,7 +296,8 @@ function NavBar() {
           </SearchContainer>
 
           <NavLinksContainer>
-            <HamburgerMenu onClick={toggleMobileMenu}>
+            
+            <HamburgerMenu onClick={toggleMobileMenu} isShopPage={isShopPage()}>
               <FaBars />
             </HamburgerMenu>
 
@@ -321,7 +330,7 @@ function NavBar() {
         </CategoriesContainer>
       </NavWrapper>
 
-      <MobileMenu isOpen={isMobileMenuOpen}>
+      <MobileMenu isOpen={isMobileMenuOpen} isShopPage={isShopPage()}>
         {categories.map(category => (
           <MobileDropdownContent key={category}>
             <MobileDropdownItem 
