@@ -115,16 +115,13 @@ const IconLink = styled(Link)`
   margin-left: 1rem;
   display: flex;
   align-items: center;
+  justify-content: center;
   transition: color 0.3s ease-in-out;
+  width: 40px;
+  height: 40px;
 
   svg {
     font-size: 1.5rem;
-    margin-right: 0.3rem;
-  }
-
-  span {
-    display: inline-block;
-    font-size: 1rem;
   }
 
   &:hover {
@@ -132,26 +129,33 @@ const IconLink = styled(Link)`
   }
 
   @media (max-width: 768px) {
-    span {
-      display: none;
-    }
+    margin-left: 0.5rem;
   }
 `;
 
 const HamburgerMenu = styled.button`
   background: none;
   border: none;
-  font-size: 1.5rem;
   cursor: pointer;
-  margin-left: 1rem;
   color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-left: 1rem;
+
+  svg {
+    font-size: 1.5rem;
+  }
 
   @media (min-width: 769px) {
     display: none;
   }
 
   @media (max-width: 768px) {
-    display: ${props => props.isShopPage ? 'none' : 'block'};
+    display: ${props => props.isShopPage ? 'none' : 'flex'};
+    margin-left: 0.5rem;
   }
 
   &:hover {
@@ -251,100 +255,94 @@ function NavBar() {
     const encodedCategory = encodeURIComponent(category);
     navigate(`/shop?category=${encodedCategory}`);
     setActiveCategory(category);
-    setIsMobileMenuOpen(false);
-  };
+    setIsMobileMenuOpen(false)};
 
-  const isShopPage = () => {
-    return location.pathname === '/shop' || location.pathname.startsWith('/shop/');
-  };
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch('https://fakestoreapi.com/products/categories');
-        const data = await response.json();
-        setCategories(['All', ...data]);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
+    const isShopPage = () => {
+      return location.pathname === '/shop' || location.pathname.startsWith('/shop/');
     };
-
-    fetchCategories();
-  }, []);
-
-  return (
-    <>
-      <GlobalStyle />
-      <NavWrapper>
-        <Nav>
-          <LogoContainer>
-            <Logo to="/">E-comm</Logo>
-          </LogoContainer>
-
-          <SearchContainer>
-            <SearchForm onSubmit={handleSearch}>
-              <SearchInput
-                type="text"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <SearchButton type="submit">
-                <FaSearch />
-              </SearchButton>
-            </SearchForm>
-          </SearchContainer>
-
-          <NavLinksContainer>
-            
-            <HamburgerMenu onClick={toggleMobileMenu} isShopPage={isShopPage()}>
-              <FaBars />
-            </HamburgerMenu>
-
-            <IconLink to="/login">
-              <FaSignInAlt />
-              <span>Login</span>
-            </IconLink>
-            <IconLink to="/favorites">
-              <FaHeart />
-              <span>Favorites</span>
-            </IconLink>
-            <IconLink to="/cart">
-              <FaShoppingCart />
-              <span>Cart ({cart.length})</span>
-            </IconLink>
-          </NavLinksContainer>
-        </Nav>
-
-        <CategoriesContainer>
+  
+    useEffect(() => {
+      const fetchCategories = async () => {
+        try {
+          const response = await fetch('https://fakestoreapi.com/products/categories');
+          const data = await response.json();
+          setCategories(['All', ...data]);
+        } catch (error) {
+          console.error('Error fetching categories:', error);
+        }
+      };
+  
+      fetchCategories();
+    }, []);
+  
+    return (
+      <>
+        <GlobalStyle />
+        <NavWrapper>
+          <Nav>
+            <LogoContainer>
+              <Logo to="/">E-comm</Logo>
+            </LogoContainer>
+  
+            <SearchContainer>
+              <SearchForm onSubmit={handleSearch}>
+                <SearchInput
+                  type="text"
+                  placeholder="Search"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <SearchButton type="submit">
+                  <FaSearch />
+                </SearchButton>
+              </SearchForm>
+            </SearchContainer>
+  
+            <NavLinksContainer>
+              <HamburgerMenu onClick={toggleMobileMenu} isShopPage={isShopPage()}>
+                <FaBars />
+              </HamburgerMenu>
+              <IconLink to="/login">
+                <FaSignInAlt />
+              </IconLink>
+              <IconLink to="/favorites">
+                <FaHeart />
+              </IconLink>
+              <IconLink to="/cart">
+                <FaShoppingCart />
+              </IconLink>
+            </NavLinksContainer>
+          </Nav>
+  
+          <CategoriesContainer>
+            {categories.map(category => (
+              <CategoryLink 
+                key={category}
+                to={`/shop?category=${encodeURIComponent(category)}`}
+                onClick={() => handleCategoryClick(category)}
+                className={activeCategory === category ? 'active' : ''}
+              >
+                {category}
+              </CategoryLink>
+            ))}
+          </CategoriesContainer>
+        </NavWrapper>
+  
+        <MobileMenu isOpen={isMobileMenuOpen} isShopPage={isShopPage()}>
           {categories.map(category => (
-            <CategoryLink 
-              key={category}
-              to={`/shop?category=${encodeURIComponent(category)}`}
-              onClick={() => handleCategoryClick(category)}
-              className={activeCategory === category ? 'active' : ''}
-            >
-              {category}
-            </CategoryLink>
+            <MobileDropdownContent key={category}>
+              <MobileDropdownItem 
+                to={`/shop?category=${encodeURIComponent(category)}`}
+                onClick={() => handleCategoryClick(category)}
+                className={activeCategory === category ? 'active' : ''}
+              >
+                {category}
+              </MobileDropdownItem>
+            </MobileDropdownContent>
           ))}
-        </CategoriesContainer>
-      </NavWrapper>
-
-      <MobileMenu isOpen={isMobileMenuOpen} isShopPage={isShopPage()}>
-        {categories.map(category => (
-          <MobileDropdownContent key={category}>
-            <MobileDropdownItem 
-              to={`/shop?category=${encodeURIComponent(category)}`}
-              onClick={() => handleCategoryClick(category)}
-              className={activeCategory === category ? 'active' : ''}
-            >
-              {category}
-            </MobileDropdownItem>
-          </MobileDropdownContent>
-        ))}
-      </MobileMenu>
-    </>
-  );
-}
-
-export default NavBar;
+        </MobileMenu>
+      </>
+    );
+  }
+  
+  export default NavBar;
