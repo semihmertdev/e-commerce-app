@@ -144,6 +144,7 @@ const HamburgerMenu = styled.button`
   font-size: 1.5rem;
   cursor: pointer;
   margin-left: 1rem;
+  color: #333;
 
   @media (min-width: 769px) {
     display: none;
